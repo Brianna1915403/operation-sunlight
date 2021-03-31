@@ -25,7 +25,7 @@
         android:layout_marginLeft="16dp"
         android:layout_weight="20"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button"
         app:layout_constraintStart_toEndOf="@+id/images"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -37,7 +37,7 @@
             <TextView
                 android:id="@+id/common_nameTextView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:text="Common Name"
                 android:textColor="@color/black"
                 android:textSize="24sp" />
@@ -46,46 +46,47 @@
         <TableRow
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="8">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/labelScientificName"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
                 android:text="Scientific Name: "
                 android:textColor="@color/black"
                 android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/scientific_nameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="10"
-                android:text="Scientific Name AAAAAA"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="Scientific Name"
                 android:textColor="@color/black"
                 android:textSize="10sp" />
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/labelFamilyCommonName"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:text="Scientific Name: "
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="Family Common Name:"
                 android:textColor="@color/black"
                 android:textSize="10sp" />
 
             <TextView
-                android:id="@+id/scientific_nameTextView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="10"
-                android:text="Scientific Name AAAAAA"
+                android:id="@+id/family_common_nameTextView"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:text="Family Name"
                 android:textColor="@color/black"
                 android:textSize="10sp" />
 
@@ -93,10 +94,24 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
         </TableRow>
     </TableLayout>
+
+    <Button
+        android:id="@+id/button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:background="@color/white"
+        android:text=">>"
+        android:textColor="@color/black"
+        app:backgroundTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
