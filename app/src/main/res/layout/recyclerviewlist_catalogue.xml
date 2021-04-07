@@ -53,6 +53,8 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
+                android:gravity="right"
+                android:textStyle="bold"
                 android:text="Scientific Name: "
                 android:textColor="@color/black"
                 android:textSize="10sp" />
@@ -62,7 +64,6 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:text="Scientific Name"
                 android:textColor="@color/black"
                 android:textSize="10sp" />
         </TableRow>
@@ -77,6 +78,8 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
+                android:gravity="right"
+                android:textStyle="bold"
                 android:text="Family Common Name:"
                 android:textColor="@color/black"
                 android:textSize="10sp" />
@@ -86,7 +89,6 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:text="Family Name"
                 android:textColor="@color/black"
                 android:textSize="10sp" />
 

@@ -16,16 +16,11 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
-    ArrayList<String> mImageURIs = new ArrayList<>();
-    ArrayList<String> common_name = new ArrayList<>();
-    ArrayList<String> scientific_name = new ArrayList<>();
+   ArrayList<Plant> plant_list = new ArrayList<>();
     Context mContext;
 
-    public RecyclerViewAdapter(ArrayList<String> mImages, ArrayList<String> mCommonNames,
-                               ArrayList<String> mScientificNames, Context mContext) {
-        this.mImageURIs = mImages;
-        this.common_name = mCommonNames;
-        this.scientific_name = mScientificNames;
+    public RecyclerViewAdapter(ArrayList<Plant> plants, Context mContext) {
+        this.plant_list = plants;
         this.mContext = mContext;
     }
 
@@ -40,23 +35,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder holder, int position) {
         Glide.with(mContext)
                 .asBitmap()
-                .load(mImageURIs.get(position))
+                .load(plant_list.get(position).image_url)
                 .into(holder.image);
 
-        holder.common_name.setText(common_name.get(position));
-        holder.scientific_name.setText(scientific_name.get(position));
+        holder.common_name.setText(plant_list.get(position).common_name);
+        holder.scientific_name.setText(plant_list.get(position).scientific_name);
+        holder.family_common_name.setText(plant_list.get(position).family_common_name);
+
 
     }
 
     @Override
     public int getItemCount() {
-        return common_name.size();
+        return plant_list.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView image;
-        TextView common_name, scientific_name;
+        TextView common_name, scientific_name, family_common_name;
         LinearLayout parentLayout;
 
         public ViewHolder(@NonNull View itemView) {
@@ -64,6 +61,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             image = itemView.findViewById(R.id.images);
             common_name = itemView.findViewById(R.id.common_nameTextView);
             scientific_name = itemView.findViewById(R.id.scientific_nameTextView);
+            family_common_name = itemView.findViewById(R.id.family_common_nameTextView);
 
             parentLayout = itemView.findViewById(R.id.parent);
         }
