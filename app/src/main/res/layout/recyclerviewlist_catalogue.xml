@@ -40,7 +40,7 @@
                 android:layout_height="fill_parent"
                 android:text="Common Name"
                 android:textColor="@color/black"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow

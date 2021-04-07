@@ -31,4 +31,14 @@ public class Plant {
     public String getImage_url() {
         return image_url;
     }
+
+    @Override
+    public String toString() {
+        return "Plant{" +
+                "common_name='" + common_name + '\'' +
+                ", scientific_name='" + scientific_name + '\'' +
+                ", family_common_name='" + family_common_name + '\'' +
+                ", image_url='" + image_url + '\'' +
+                '}' + "\n";
+    }
 }

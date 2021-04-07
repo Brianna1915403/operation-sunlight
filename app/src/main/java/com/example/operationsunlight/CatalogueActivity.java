@@ -20,10 +20,18 @@ import java.util.HashMap;
 
 public class CatalogueActivity extends AppCompatActivity {
 
-//    private ProgressDialog progressDialog;
-//    private ListView listView;
-//    private static String url = "https://api.androidhive.info/contacts/";
-//    ArrayList<HashMap<String, String>> contactList;
+    private ProgressDialog progressDialog;
+
+    private int totalResults;
+
+    private RecyclerView recyclerView;
+
+
+    private static String url = "https://trefle.io/api/v1/plants";
+    private final static String token = "?token=dZWkjKZTg7acXlHla7dapXq4-cAgxA4nU1eqHCA763M";
+    private static String search = "/search" + token + "&q=";
+    private static String pagination = "&page=";
+
 
    ArrayList<Plant> plant_list = new ArrayList<>();
 
@@ -32,71 +40,64 @@ public class CatalogueActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        plant_list.add(new Plant("Honey mesquite", "Prosopis glandulosa", "Something",
-                "https://bs.plantnet.org/image/o/d164296148c0d29f46b2f29fb38cffcc1469b83c"));
+        recyclerView = findViewById(R.id.recyclerView);
 
-        plant_list.add(new Plant("Honey mesquite", "Prosopis glandulosa", "Something Else",
-                ""));
+        new GetPlants().execute();
 
 
-
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(plant_list, this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
 //        listView = findViewById(R.id.list);
 //        contactList = new ArrayList<>();
 //        new GetContacts().execute();
     }
 
-//    private class GetContacts extends AsyncTask<Void, Void, Void> {
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            progressDialog = new ProgressDialog(MainActivity.this);
-//            progressDialog.setMessage("Retrieving Data...");
-//            progressDialog.setCancelable(false);
-//            progressDialog.show();
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//            HTTPHandler handler = new HTTPHandler();
-//            String jsonStr = handler.makeServiceCall(url);
-//            if (jsonStr != null) {
-//                try {
-//                    JSONObject jsonObject = new JSONObject(jsonStr);
-//                    JSONArray contacts = jsonObject.getJSONArray("contacts");
-//                    for (int i = 0; i < contacts.length(); ++i) {
-//                        JSONObject object = contacts.getJSONObject(i);
-//
-//                        String id = object.getString("id");
-//                        String name = object.getString("name");
-//                        String email = object.getString("email");
-//
-//                        HashMap<String, String> contactMap = new HashMap<>();
-//                        contactMap.put("id", id);
-//                        contactMap.put("name", name);
-//                        contactMap.put("email", email);
-//
-//                        contactList.add(contactMap);
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void aVoid) {
-//            super.onPostExecute(aVoid);
-//            if (progressDialog.isShowing())
-//                progressDialog.dismiss();
-//            ListAdapter listAdapter = new SimpleAdapter(MainActivity.this, contactList, R.layout.list_item, new String[] {"id", "name", "email"}, new int[] {R.id.id, R.id.name, R.id.email});
-//            listView.setAdapter(listAdapter);
-//        }
-//    }
+    private class GetPlants extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(CatalogueActivity.this);
+            progressDialog.setMessage("Retrieving Data...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HTTPHandler handler = new HTTPHandler();
+            String jsonStr = handler.makeServiceCall(url + token);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonStr);
+                    JSONArray plants = jsonObject.getJSONArray("data");
+                    totalResults = jsonObject.getJSONObject("meta").getInt("total");
+                    System.out.println(totalResults);
+                    for (int i = 0; i < plants.length(); ++i) {
+                        JSONObject object = plants.getJSONObject(i);
+
+                        plant_list.add( new Plant(object.getString("common_name"),
+                                object.getString("scientific_name"),
+                                object.getString("family_common_name"),
+                                object.getString("image_url")));
+                    }
+                    System.out.println(plant_list);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (progressDialog.isShowing())
+                progressDialog.dismiss();
+
+            RecyclerViewAdapter adapter = new RecyclerViewAdapter(plant_list, CatalogueActivity.this);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(CatalogueActivity.this));
+        }
+    }
 }
