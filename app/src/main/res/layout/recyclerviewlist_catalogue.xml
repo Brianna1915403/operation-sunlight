@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/recyclerviewlist_catalogue"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@color/black"
     android:orientation="horizontal">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -39,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:text="Common Name"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="18sp" />
         </TableRow>
 
@@ -54,17 +53,17 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:textStyle="bold"
                 android:text="Scientific Name: "
-                android:textColor="@color/black"
-                android:textSize="10sp" />
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/scientific_nameTextView"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="10sp" />
         </TableRow>
 
@@ -79,17 +78,17 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:textStyle="bold"
                 android:text="Family Common Name:"
-                android:textColor="@color/black"
-                android:textSize="10sp" />
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/family_common_nameTextView"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="10sp" />
 
         </TableRow>
@@ -107,10 +106,10 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="10"
-        android:background="@color/white"
+        android:background="@color/black"
         android:text=">>"
-        android:textColor="@color/black"
-        app:backgroundTint="@color/white"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
