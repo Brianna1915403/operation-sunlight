@@ -7,17 +7,19 @@ public class Plant {
     String image_url;
 
     public Plant(String cn, String sn, String fcn, String iu){
-        if(iu.isEmpty()){
-            this.common_name = cn;
-            this.scientific_name = sn;
-            this.family_common_name = fcn;
-            this.image_url = "https://cdn3.iconfinder.com/data/icons/file-and-folder-fill-icons-set/144/File_Error-512.png";
-        }else{
             this.common_name = cn;
             this.scientific_name = sn;
             this.family_common_name = fcn;
             this.image_url = iu;
-        }
+            if(this.common_name.equals("null")){
+                this.common_name = "Unknown";
+            }
+            if(this.scientific_name.equals("null")){
+                this.scientific_name = "Unknown";
+            }
+            if(this.family_common_name.equals("null")){
+                this.family_common_name = "Unknown";
+            }
     }
 
     public String getCommon_name() {

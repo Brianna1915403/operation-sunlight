@@ -7,9 +7,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,24 +36,110 @@ public class CatalogueActivity extends AppCompatActivity {
     private final static String token = "?token=dZWkjKZTg7acXlHla7dapXq4-cAgxA4nU1eqHCA763M";
     private static String search = "/search" + token + "&q=";
     private static String pagination = "&page=";
+    private static String sort = "&order[common_name]=";
+
+    private static String final_request = "";
+
+
+    private String searchQuery = "";
+    private boolean isAscendingOrder = true;
+    private int currentPage = 1;
+
+    Button searchBTN, nextBTN, previousBTN;
+    EditText searchBar;
+    ToggleButton ascendingOrder;
+    TextView pageNum;
+
+    int max_pages = 1;
 
 
    ArrayList<Plant> plant_list = new ArrayList<>();
+
+   RecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        adapter = new RecyclerViewAdapter(plant_list, CatalogueActivity.this);
+        searchBTN = findViewById(R.id.searchButton);
+        nextBTN = findViewById(R.id.nextPageButton);
+        previousBTN = findViewById(R.id.previousPageButton);
 
+        searchBar = findViewById(R.id.searchBar);
+        ascendingOrder = findViewById(R.id.ascendingOrder_ToggleButton);
         recyclerView = findViewById(R.id.recyclerView);
 
-        new GetPlants().execute();
+        pageNum = findViewById(R.id.pageNumberTextView);
+
+        pageNum.setText("No Query Entered");
+
+        searchBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                currentPage = 1;
+                searchQuery = searchBar.getText().toString();
+                isAscendingOrder = ascendingOrder.isChecked();
+                if(searchQuery.isEmpty())
+                    return;
+                if(isAscendingOrder == false){
+                    final_request = url + search + searchQuery + pagination + currentPage + sort + "asc";
+                }else if(isAscendingOrder == true){
+                    final_request = url + search + searchQuery + pagination + currentPage + sort + "desc";
+                }
+                clearRecycler();
+                new GetPlants().execute();
+                max_pages = (totalResults/20) + 1;
+                pageNum.setText("Page " + currentPage + " out of " + max_pages);
+            }
+
+        });
+
+        nextBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentPage < max_pages)
+                currentPage++;
+                if(isAscendingOrder == false){
+                    final_request = url + search + searchQuery + pagination + currentPage + sort + "asc";
+                }else if(isAscendingOrder == true){
+                    final_request = url + search + searchQuery + pagination + currentPage + sort + "desc";
+                }
+                clearRecycler();
+                new GetPlants().execute();
+                pageNum.setText("Page " + currentPage + " out of " + max_pages);
+            }
+        });
+
+        previousBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentPage > 1)
+                currentPage--;
+                if(isAscendingOrder == false){
+                    final_request = url + search + searchQuery + pagination + currentPage + sort + "asc";
+                }else if(isAscendingOrder == true){
+                    final_request = url + search + searchQuery + pagination + currentPage + sort + "desc";
+                }
+                clearRecycler();
+                new GetPlants().execute();
+                pageNum.setText("Page " + currentPage + " out of " + max_pages);
+            }
+        });
+
+
 
 
 //
 //        listView = findViewById(R.id.list);
 //        contactList = new ArrayList<>();
 //        new GetContacts().execute();
+    }
+
+    private void clearRecycler(){
+        plant_list.clear();
+        adapter.notifyDataSetChanged();
     }
 
     private class GetPlants extends AsyncTask<Void, Void, Void> {
@@ -65,7 +156,7 @@ public class CatalogueActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             HTTPHandler handler = new HTTPHandler();
-            String jsonStr = handler.makeServiceCall(url + token);
+            String jsonStr = handler.makeServiceCall(final_request);
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObject = new JSONObject(jsonStr);
@@ -94,7 +185,7 @@ public class CatalogueActivity extends AppCompatActivity {
             if (progressDialog.isShowing())
                 progressDialog.dismiss();
 
-            RecyclerViewAdapter adapter = new RecyclerViewAdapter(plant_list, CatalogueActivity.this);
+            adapter = new RecyclerViewAdapter(plant_list, CatalogueActivity.this);
             recyclerView.setAdapter(adapter);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(CatalogueActivity.this));
