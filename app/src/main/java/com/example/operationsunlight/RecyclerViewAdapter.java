@@ -28,7 +28,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @NonNull
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerviewlist_catalogue, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_plant, parent, false);
         return new ViewHolder(view);
     }
 
@@ -37,17 +37,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Glide.with(mContext)
                 .asBitmap()
                 .load(plant_list.get(position).image_url)
-                .placeholder(R.drawable.error_file)
-                .error(R.drawable.error_file)
+                .placeholder(R.drawable.ic_error_outline)
+                .error(R.drawable.ic_error_outline)
                 .into(holder.image);
 
         holder.common_name.setText(plant_list.get(position).common_name);
         holder.scientific_name.setText(plant_list.get(position).scientific_name);
         holder.family_common_name.setText(plant_list.get(position).family_common_name);
-
-
     }
-
 
     @Override
     public int getItemCount() {
@@ -62,10 +59,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.images);
-            common_name = itemView.findViewById(R.id.common_nameTextView);
-            scientific_name = itemView.findViewById(R.id.scientific_nameTextView);
-            family_common_name = itemView.findViewById(R.id.family_common_nameTextView);
+            image = itemView.findViewById(R.id.plant_image);
+            common_name = itemView.findViewById(R.id.common_name_textview);
+            scientific_name = itemView.findViewById(R.id.scientific_name_textview);
+            family_common_name = itemView.findViewById(R.id.family_common_name_textview);
 
             parentLayout = itemView.findViewById(R.id.parent);
         }

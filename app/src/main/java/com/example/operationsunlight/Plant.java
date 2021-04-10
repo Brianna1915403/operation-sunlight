@@ -6,11 +6,11 @@ public class Plant {
     String family_common_name;
     String image_url;
 
-    public Plant(String cn, String sn, String fcn, String iu){
-            this.common_name = cn;
-            this.scientific_name = sn;
-            this.family_common_name = fcn;
-            this.image_url = iu;
+    public Plant(String common_name, String scientific_name, String family_common_name, String image_url){
+            this.common_name = common_name;
+            this.scientific_name = scientific_name;
+            this.family_common_name = family_common_name;
+            this.image_url = image_url;
             if(this.common_name.equals("null")){
                 this.common_name = "Unknown";
             }
