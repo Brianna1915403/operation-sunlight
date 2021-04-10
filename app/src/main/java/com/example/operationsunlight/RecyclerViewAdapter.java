@@ -37,7 +37,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Glide.with(mContext)
                 .asBitmap()
                 .load(plant_list.get(position).image_url)
-                .placeholder(R.drawable.error_file)
+                .placeholder(R.drawable.loading_icon)
                 .error(R.drawable.error_file)
                 .into(holder.image);
 
