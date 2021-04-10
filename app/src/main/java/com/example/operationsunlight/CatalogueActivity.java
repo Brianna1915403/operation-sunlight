@@ -22,6 +22,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
+
+import javax.xml.transform.Result;
 
 public class CatalogueActivity extends AppCompatActivity {
 
@@ -74,6 +77,7 @@ public class CatalogueActivity extends AppCompatActivity {
 
         pageNum.setText("No Query Entered");
 
+
         searchBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +93,13 @@ public class CatalogueActivity extends AppCompatActivity {
                     final_request = url + search + searchQuery + pagination + currentPage + sort + "desc";
                 }
                 clearRecycler();
-                new GetPlants().execute();
+                try {
+                    new GetPlants().execute().get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 max_pages = (totalResults/20) + 1;
                 pageNum.setText("Page " + currentPage + " out of " + max_pages);
             }
@@ -107,7 +117,13 @@ public class CatalogueActivity extends AppCompatActivity {
                     final_request = url + search + searchQuery + pagination + currentPage + sort + "desc";
                 }
                 clearRecycler();
-                new GetPlants().execute();
+                try {
+                    new GetPlants().execute().get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 pageNum.setText("Page " + currentPage + " out of " + max_pages);
             }
         });
@@ -123,7 +139,13 @@ public class CatalogueActivity extends AppCompatActivity {
                     final_request = url + search + searchQuery + pagination + currentPage + sort + "desc";
                 }
                 clearRecycler();
-                new GetPlants().execute();
+                try {
+                    new GetPlants().execute().get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 pageNum.setText("Page " + currentPage + " out of " + max_pages);
             }
         });
@@ -162,11 +184,12 @@ public class CatalogueActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(jsonStr);
                     JSONArray plants = jsonObject.getJSONArray("data");
                     totalResults = jsonObject.getJSONObject("meta").getInt("total");
-                    System.out.println(totalResults);
+                    System.out.println("Total Results: " + totalResults);
                     for (int i = 0; i < plants.length(); ++i) {
                         JSONObject object = plants.getJSONObject(i);
 
-                        plant_list.add( new Plant(object.getString("common_name"),
+                        plant_list.add( new Plant(object.getInt("id"),
+                                object.getString("common_name"),
                                 object.getString("scientific_name"),
                                 object.getString("family_common_name"),
                                 object.getString("image_url")));
@@ -189,6 +212,8 @@ public class CatalogueActivity extends AppCompatActivity {
             recyclerView.setAdapter(adapter);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(CatalogueActivity.this));
+
+
         }
     }
 }

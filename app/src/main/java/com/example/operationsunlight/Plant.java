@@ -1,12 +1,14 @@
 package com.example.operationsunlight;
 
 public class Plant {
+    int plant_id;
     String common_name;
     String scientific_name;
     String family_common_name;
     String image_url;
 
-    public Plant(String cn, String sn, String fcn, String iu){
+    public Plant(int id, String cn, String sn, String fcn, String iu){
+            this.plant_id = id;
             this.common_name = cn;
             this.scientific_name = sn;
             this.family_common_name = fcn;
@@ -37,10 +39,11 @@ public class Plant {
     @Override
     public String toString() {
         return "Plant{" +
-                "common_name='" + common_name + '\'' +
+                "plant_id=" + plant_id +
+                ", common_name='" + common_name + '\'' +
                 ", scientific_name='" + scientific_name + '\'' +
                 ", family_common_name='" + family_common_name + '\'' +
                 ", image_url='" + image_url + '\'' +
-                '}' + "\n";
+                '}';
     }
 }

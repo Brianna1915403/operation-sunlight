@@ -1,8 +1,10 @@
 package com.example.operationsunlight;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -10,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.module.AppGlideModule;
 
 import java.util.ArrayList;
 
@@ -45,8 +46,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.scientific_name.setText(plant_list.get(position).scientific_name);
         holder.family_common_name.setText(plant_list.get(position).family_common_name);
 
+        int plant_id = plant_list.get(position).plant_id;
+
+        holder.viewPlantInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendToInfo = new Intent(mContext, SpecificPlantInfo.class);
+                sendToInfo.putExtra("plant_id", plant_id);
+                mContext.startActivity(sendToInfo);
+            }
+        });
+
 
     }
+
 
 
     @Override
@@ -59,6 +72,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         CircleImageView image;
         TextView common_name, scientific_name, family_common_name;
         LinearLayout parentLayout;
+        Button viewPlantInfo;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,6 +80,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             common_name = itemView.findViewById(R.id.common_nameTextView);
             scientific_name = itemView.findViewById(R.id.scientific_nameTextView);
             family_common_name = itemView.findViewById(R.id.family_common_nameTextView);
+            viewPlantInfo = itemView.findViewById(R.id.viewInfoButton);
 
             parentLayout = itemView.findViewById(R.id.parent);
         }
