@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:text="Scientifc Name"
+                android:text="Scientific Name"
                 android:textColor="@color/white" />
         </TableRow>
 
