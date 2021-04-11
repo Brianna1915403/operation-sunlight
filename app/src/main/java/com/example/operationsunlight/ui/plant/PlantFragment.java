@@ -152,15 +152,10 @@ public class PlantFragment extends Fragment implements onPlantListener {
         });
 
         isAscendingOrder = !order.isChecked();
-        if (final_request.isEmpty()) {
-            clearRecycler();
+        if (final_request.isEmpty())
             final_request = url + token + pagination + currentPage + sort + (isAscendingOrder ? "asc" : "desc");
-            try {
-                new GetPlants().execute().get();
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        clearRecycler();
+        new GetPlants().execute();
     }
 
     private void clearRecycler() {
