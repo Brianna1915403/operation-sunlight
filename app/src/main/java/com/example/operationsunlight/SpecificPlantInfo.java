@@ -43,8 +43,6 @@ public class SpecificPlantInfo extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    RecyclerViewAdapter adapter;
-
     PlantInfo plantInfo;
 
     ImageView plantImage;
