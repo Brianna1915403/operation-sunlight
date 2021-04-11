@@ -42,31 +42,19 @@ public class WeatherForecast extends AppCompatActivity implements LocationListen
 
     private String final_request = "";
 
-    private int datetime;
-    private int sunrise;
-    private int sunset;
-    private double temp;
-    private double feels;
-    private int humidity;
-    private double uvi;
-    private int clouds;
-    private double wind_speed;
-    private int wind_deg;
-    private String main;
-    private String desc;
-    private String icon;
-    private double rain = 0;
-
     TextView textView, textView2, textView3, textView4, textView5, textView6, textView7, textView8, textView9, textView10, textView11, textView12, textView13;
 
     protected LocationManager locationManager;
     protected LocationListener locationListener;
+
+    public Weather currentWeather;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather_forecast);
+        currentWeather = new Weather();
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -85,7 +73,7 @@ public class WeatherForecast extends AppCompatActivity implements LocationListen
         final_request = url + apiKey + lat + lon;
 
         try {
-            new WeatherForecast.GetWeather().execute().get();
+            new WeatherForecast.GetCurrentWeather().execute().get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -106,7 +94,7 @@ public class WeatherForecast extends AppCompatActivity implements LocationListen
         textView12 = findViewById(R.id.textView12);
         textView13 = findViewById(R.id.textView13);
 
-        long timestamp = datetime;
+        long timestamp = currentWeather.datetime;
         Date date = new Date((long)timestamp*1000);
 
         textView.setText(date.toString());
@@ -122,7 +110,7 @@ public class WeatherForecast extends AppCompatActivity implements LocationListen
     }
 
 
-    private class GetWeather extends AsyncTask<Void, Void, Void> {
+    private class GetCurrentWeather extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -142,25 +130,25 @@ public class WeatherForecast extends AppCompatActivity implements LocationListen
                     JSONObject jsonObject = new JSONObject(jsonStr);
                     JSONObject current = jsonObject.getJSONObject("current");
                     JSONArray current_weather = current.getJSONArray("weather");
-                    datetime = current.getInt("dt");
-                    sunrise = current.getInt("sunrise");
-                    sunset = current.getInt("sunset");
-                    temp = current.getDouble("temp");
-                    feels = current.getDouble("feels_like");
-                    humidity = current.getInt("humidity");
-                    uvi = current.getDouble("uvi");
-                    clouds = current.getInt("clouds");
-                    wind_speed = current.getDouble("wind_speed");
-                    wind_deg = current.getInt("wind_deg");
-                    main = current_weather.getJSONObject(0).getString("main");
-                    desc = current_weather.getJSONObject(0).getString("description");
-                    icon = current_weather.getJSONObject(0).getString("icon");
+                    currentWeather.datetime = current.getInt("dt");
+                    currentWeather.sunrise = current.getInt("sunrise");
+                    currentWeather.sunset = current.getInt("sunset");
+                    currentWeather.temp = current.getDouble("temp");
+                    currentWeather.feels = current.getDouble("feels_like");
+                    currentWeather.humidity = current.getInt("humidity");
+                    currentWeather.uvi = current.getDouble("uvi");
+                    currentWeather.clouds = current.getInt("clouds");
+                    currentWeather.wind_speed = current.getDouble("wind_speed");
+                    currentWeather.wind_deg = current.getInt("wind_deg");
+                    currentWeather.main = current_weather.getJSONObject(0).getString("main");
+                    currentWeather.desc = current_weather.getJSONObject(0).getString("description");
+                    currentWeather.icon = current_weather.getJSONObject(0).getString("icon");
 
                     if(current.has("rain")) {
                         JSONObject current_rain = current.getJSONObject("rain");
-                        rain = current_rain.getDouble("1h");
+                        currentWeather.rain = current_rain.getDouble("1h");
                     } else {
-
+                        currentWeather.rain = 0;
                     }
 
                 } catch (JSONException e) {
