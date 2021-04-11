@@ -5,27 +5,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.example.operationsunlight.ui.plant.Plant;
+import com.example.operationsunlight.ui.plant.PlantRecyclerAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
-
-import javax.xml.transform.Result;
 
 public class CatalogueActivity extends AppCompatActivity {
 
@@ -44,32 +39,29 @@ public class CatalogueActivity extends AppCompatActivity {
 
     private static String final_request = "";
 
-
     private String searchQuery = "";
     private boolean isAscendingOrder = true;
     private int currentPage = 1;
 
-    Button searchBTN, nextBTN, previousBTN, goToWeather;
+    Button searchBTN, nextBTN, previousBTN;
     EditText searchBar;
     ToggleButton ascendingOrder;
     TextView pageNum;
 
     int max_pages = 1;
 
+    ArrayList<Plant> plant_list = new ArrayList<>();
 
-   ArrayList<Plant> plant_list = new ArrayList<>();
-
-   RecyclerViewAdapter adapter;
+    PlantRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        adapter = new RecyclerViewAdapter(plant_list, CatalogueActivity.this);
+//        adapter = new PlantRecyclerAdapter(plant_list, CatalogueActivity.this);
         searchBTN = findViewById(R.id.searchButton);
         nextBTN = findViewById(R.id.nextPageButton);
         previousBTN = findViewById(R.id.previousPageButton);
-        goToWeather = findViewById(R.id.goToWeather);
 
         searchBar = findViewById(R.id.searchBar);
         ascendingOrder = findViewById(R.id.ascendingOrder_ToggleButton);
@@ -78,7 +70,6 @@ public class CatalogueActivity extends AppCompatActivity {
         pageNum = findViewById(R.id.pageNumberTextView);
 
         pageNum.setText("No Query Entered");
-
 
         searchBTN.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,13 +86,7 @@ public class CatalogueActivity extends AppCompatActivity {
                     final_request = url + search + searchQuery + pagination + currentPage + sort + "desc";
                 }
                 clearRecycler();
-                try {
-                    new GetPlants().execute().get();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                new GetPlants().execute();
                 max_pages = (totalResults/20) + 1;
                 pageNum.setText("Page " + currentPage + " out of " + max_pages);
             }
@@ -119,13 +104,7 @@ public class CatalogueActivity extends AppCompatActivity {
                     final_request = url + search + searchQuery + pagination + currentPage + sort + "desc";
                 }
                 clearRecycler();
-                try {
-                    new GetPlants().execute().get();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                new GetPlants().execute();
                 pageNum.setText("Page " + currentPage + " out of " + max_pages);
             }
         });
@@ -141,22 +120,8 @@ public class CatalogueActivity extends AppCompatActivity {
                     final_request = url + search + searchQuery + pagination + currentPage + sort + "desc";
                 }
                 clearRecycler();
-                try {
-                    new GetPlants().execute().get();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                new GetPlants().execute();
                 pageNum.setText("Page " + currentPage + " out of " + max_pages);
-            }
-        });
-
-        goToWeather.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CatalogueActivity.this, WeatherForecast.class);
-                startActivity(intent);
             }
         });
 
@@ -194,12 +159,11 @@ public class CatalogueActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(jsonStr);
                     JSONArray plants = jsonObject.getJSONArray("data");
                     totalResults = jsonObject.getJSONObject("meta").getInt("total");
-                    System.out.println("Total Results: " + totalResults);
+                    System.out.println(totalResults);
                     for (int i = 0; i < plants.length(); ++i) {
                         JSONObject object = plants.getJSONObject(i);
 
-                        plant_list.add( new Plant(object.getInt("id"),
-                                object.getString("common_name"),
+                        plant_list.add( new Plant(object.getInt("id"), object.getString("common_name"),
                                 object.getString("scientific_name"),
                                 object.getString("family_common_name"),
                                 object.getString("image_url")));
@@ -218,12 +182,9 @@ public class CatalogueActivity extends AppCompatActivity {
             if (progressDialog.isShowing())
                 progressDialog.dismiss();
 
-            adapter = new RecyclerViewAdapter(plant_list, CatalogueActivity.this);
             recyclerView.setAdapter(adapter);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(CatalogueActivity.this));
-
-
         }
     }
 }
