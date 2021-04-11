@@ -10,24 +10,19 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.operationsunlight.CatalogueActivity;
 import com.example.operationsunlight.HTTPHandler;
 import com.example.operationsunlight.R;
-import com.example.operationsunlight.ui.home.HomeFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
