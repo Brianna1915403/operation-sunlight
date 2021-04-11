@@ -18,6 +18,12 @@
         tools:layout="@layout/fragment_plant" />
 
     <fragment
+        android:id="@+id/nav_plant_bio"
+        android:name="com.example.operationsunlight.ui.plant.PlantBioFragment"
+        android:label="Plant Bio"
+        tools:layout="@layout/fragment_plant_bio" />
+
+    <fragment
         android:id="@+id/nav_weather"
         android:name="com.example.operationsunlight.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_weather"

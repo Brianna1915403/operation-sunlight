@@ -14,14 +14,16 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.operationsunlight.CatalogueActivity;
 import com.example.operationsunlight.HTTPHandler;
 import com.example.operationsunlight.R;
-import com.example.operationsunlight.Plant;
-import com.example.operationsunlight.RecyclerViewAdapter;
+import com.example.operationsunlight.ui.home.HomeFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,10 +31,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class PlantFragment extends Fragment {
+public class PlantFragment extends Fragment implements onPlantListener {
     private View root;
     private RecyclerView recyclerView;
-    private RecyclerViewAdapter adapter;
+    private PlantRecyclerAdapter adapter;
     private ArrayList<Plant> plant_list = new ArrayList<>();
     private SearchView searchView;
     private ToggleButton order;
@@ -52,7 +54,7 @@ public class PlantFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_plant, container, false);
         recyclerView = root.findViewById(R.id.plant_recyclerview);
-        adapter = new RecyclerViewAdapter(plant_list, root.getContext());
+        adapter = new PlantRecyclerAdapter(plant_list, root.getContext(), this::onPlantClick);
         searchView = root.findViewById(R.id.plant_search);
         order = root.findViewById(R.id.sort_toggle);
         return root;
@@ -61,7 +63,7 @@ public class PlantFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        isAscendingOrder = !order.isChecked();
+
         // Makes it so the entire search bar is clickable not just the icon
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,9 +74,11 @@ public class PlantFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                isAscendingOrder = !order.isChecked();
                 final_request = url + search + query + pagination + currentPage + sort + (isAscendingOrder? "asc" : "desc");
                 clearRecycler();
                 new GetPlants().execute();
+                progressDialog.dismiss();
                 return false;
             }
 
@@ -86,12 +90,13 @@ public class PlantFragment extends Fragment {
         order.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Toast.makeText(root.getContext(), isChecked + " | " + final_request, Toast.LENGTH_LONG).show();
+                final_request = final_request.substring(0, final_request.lastIndexOf('=') + 1).concat(isChecked? "desc" : "asc");
                 clearRecycler();
                 new GetPlants().execute();
             }
         });
 
+        isAscendingOrder = !order.isChecked();
         clearRecycler();
         if (final_request.isEmpty())
             final_request = url + token + sort + (isAscendingOrder? "asc" : "desc");
@@ -101,6 +106,14 @@ public class PlantFragment extends Fragment {
     private void clearRecycler() {
         plant_list.clear();
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPlantClick(int plant_id) {
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+        Bundle bundle = new Bundle();
+        bundle.putInt("plant_id", plant_id);
+        navController.navigate(R.id.nav_plant_bio, bundle);
     }
 
     private class GetPlants extends AsyncTask<Void, Void, Void> {
@@ -127,7 +140,7 @@ public class PlantFragment extends Fragment {
                     for (int i = 0; i < plants.length(); ++i) {
                         JSONObject object = plants.getJSONObject(i);
 
-                        plant_list.add( new Plant(object.getString("common_name"),
+                        plant_list.add( new Plant(object.getInt("id"), object.getString("common_name"),
                                 object.getString("scientific_name"),
                                 object.getString("family_common_name"),
                                 object.getString("image_url")));
@@ -143,11 +156,10 @@ public class PlantFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            progressDialog.dismiss();
-            adapter = new RecyclerViewAdapter(plant_list, root.getContext());
             recyclerView.setAdapter(adapter);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
+            progressDialog.dismiss();
         }
     }
 }

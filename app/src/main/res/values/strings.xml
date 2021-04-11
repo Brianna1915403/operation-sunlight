@@ -13,4 +13,6 @@
     <string name="menu_weather">Weather Forecast</string>
     <string name="sort_by_ascending">Sort By: Ascending</string>
     <string name="sort_by_descending">Sort By: Descending</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

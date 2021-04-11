@@ -10,18 +10,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.example.operationsunlight.ui.plant.Plant;
+import com.example.operationsunlight.ui.plant.PlantRecyclerAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class CatalogueActivity extends AppCompatActivity {
 
@@ -40,7 +39,6 @@ public class CatalogueActivity extends AppCompatActivity {
 
     private static String final_request = "";
 
-
     private String searchQuery = "";
     private boolean isAscendingOrder = true;
     private int currentPage = 1;
@@ -52,16 +50,15 @@ public class CatalogueActivity extends AppCompatActivity {
 
     int max_pages = 1;
 
+    ArrayList<Plant> plant_list = new ArrayList<>();
 
-   ArrayList<Plant> plant_list = new ArrayList<>();
-
-   RecyclerViewAdapter adapter;
+    PlantRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        adapter = new RecyclerViewAdapter(plant_list, CatalogueActivity.this);
+//        adapter = new PlantRecyclerAdapter(plant_list, CatalogueActivity.this);
         searchBTN = findViewById(R.id.searchButton);
         nextBTN = findViewById(R.id.nextPageButton);
         previousBTN = findViewById(R.id.previousPageButton);
@@ -166,7 +163,7 @@ public class CatalogueActivity extends AppCompatActivity {
                     for (int i = 0; i < plants.length(); ++i) {
                         JSONObject object = plants.getJSONObject(i);
 
-                        plant_list.add( new Plant(object.getString("common_name"),
+                        plant_list.add( new Plant(object.getInt("id"), object.getString("common_name"),
                                 object.getString("scientific_name"),
                                 object.getString("family_common_name"),
                                 object.getString("image_url")));
@@ -185,7 +182,6 @@ public class CatalogueActivity extends AppCompatActivity {
             if (progressDialog.isShowing())
                 progressDialog.dismiss();
 
-            adapter = new RecyclerViewAdapter(plant_list, CatalogueActivity.this);
             recyclerView.setAdapter(adapter);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(CatalogueActivity.this));
