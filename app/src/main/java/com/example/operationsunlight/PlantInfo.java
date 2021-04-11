@@ -7,24 +7,24 @@ public class PlantInfo {
     String family_common_name;
     String image_url;
     boolean isVegetable;
-    int daysToHarvest;
+    String daysToHarvest;
     String rowSpacing;
     String spread;
-    int min_ph;
-    int max_ph;
-    int light;
-    int min_precipitation;
-    int max_precipitation;
-    int min_root_depth;
-    int min_temperature;
-    int max_temperature;
+    String min_ph;
+    String max_ph;
+    String light;
+    String min_precipitation;
+    String max_precipitation;
+    String min_root_depth;
+    String min_temperature;
+    String max_temperature;
 
     public PlantInfo(int plant_id, String common_name, String scientific_name,
                      String family_common_name, String image_url,
-                     boolean isVegetable, int daysToHarvest,
-                     String rowSpacing, String spread, int min_ph, int max_ph,
-                     int light, int min_precipitation, int max_precipitation,
-                     int min_root_depth, int min_temperature, int max_temperature) {
+                     boolean isVegetable, String daysToHarvest,
+                     String rowSpacing, String spread, String min_ph, String max_ph,
+                     String light, String min_precipitation, String max_precipitation,
+                     String min_root_depth, String min_temperature, String max_temperature) {
 
         this.plant_id = plant_id;
         this.common_name = common_name;
@@ -43,6 +43,37 @@ public class PlantInfo {
         this.min_root_depth = min_root_depth;
         this.min_temperature = min_temperature;
         this.max_temperature = max_temperature;
+
+        if(this.common_name.equals("null"))
+            this.common_name = "N/A";
+        if(this.scientific_name.equals("null"))
+            this.scientific_name = "N/A";
+        if(this.family_common_name.equals("null"))
+            this.family_common_name = "N/A";
+        if(this.daysToHarvest.equals("null"))
+            this.daysToHarvest = "N/A";
+        if(this.rowSpacing.equals("null"))
+            this.rowSpacing = "N/A";
+        if(this.spread.equals("null"))
+            this.spread = "N/A";
+        if(this.min_ph.equals("null"))
+            this.min_ph = "N/A";
+        if(this.max_ph.equals("null"))
+            this.max_ph = "N/A";
+        if(this.light.equals("null"))
+            this.light = "N/A";
+        if(this.min_precipitation.equals("null"))
+            this.min_precipitation = "N/A";
+        if(this.max_precipitation.equals("null"))
+            this.max_precipitation = "N/A";
+        if(this.min_root_depth.equals("null"))
+            this.min_root_depth = "N/A";
+        if(this.min_temperature.equals("null"))
+            this.min_temperature = "N/A";
+        if(this.max_temperature.equals("null"))
+            this.max_temperature = "N/A";
+
+
     }
 
     public int getPlant_id() {
@@ -69,7 +100,7 @@ public class PlantInfo {
         return isVegetable;
     }
 
-    public int getDaysToHarvest() {
+    public String getDaysToHarvest() {
         return daysToHarvest;
     }
 
@@ -81,35 +112,35 @@ public class PlantInfo {
         return spread;
     }
 
-    public int getMin_ph() {
+    public String getMin_ph() {
         return min_ph;
     }
 
-    public int getMax_ph() {
+    public String getMax_ph() {
         return max_ph;
     }
 
-    public int getLight() {
+    public String getLight() {
         return light;
     }
 
-    public int getMin_precipitation() {
+    public String getMin_precipitation() {
         return min_precipitation;
     }
 
-    public int getMax_precipitation() {
+    public String getMax_precipitation() {
         return max_precipitation;
     }
 
-    public int getMin_root_depth() {
+    public String getMin_root_depth() {
         return min_root_depth;
     }
 
-    public int getMin_temperature() {
+    public String getMin_temperature() {
         return min_temperature;
     }
 
-    public int getMax_temperature() {
+    public String getMax_temperature() {
         return max_temperature;
     }
 

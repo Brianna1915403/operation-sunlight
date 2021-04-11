@@ -76,34 +76,34 @@ public class SpecificPlantInfo extends AppCompatActivity {
 
         Glide.with(SpecificPlantInfo.this)
                 .asBitmap()
-                .load("")
+                .load(plantInfo.getImage_url())
                 .placeholder(R.drawable.loading_icon)
                 .error(R.drawable.error_file)
                 .into(plantImage);
         commonName = findViewById(R.id.commonNameTextView);
         commonName.setText(plantInfo.getCommon_name());
         scientificName = findViewById(R.id.scientificNameTextView);
-        scientificName.setText(plantInfo.getScientific_name());
+        scientificName.setText("Scientific Name: " + plantInfo.getScientific_name());
         familyCommonName = findViewById(R.id.familyCommonNameTextView);
-        familyCommonName.setText(plantInfo.getFamily_common_name());
+        familyCommonName.setText("Family Common Name: " + plantInfo.getFamily_common_name());
         isVegetable = findViewById(R.id.isVegetableTextView);
-        isVegetable.setText(plantInfo.isVegetable() ? "Yes":"No");
+        isVegetable.setText("Is vegetable: " + (plantInfo.isVegetable() ? "Yes":"No"));
         daysToHarvest = findViewById(R.id.days_To_HarvestTextView);
-        daysToHarvest.setText(plantInfo.getDaysToHarvest());
+        daysToHarvest.setText("Days to Harvest: " + plantInfo.getDaysToHarvest() + " days");
         rowSpacing = findViewById(R.id.row_spacingTextView);
-        rowSpacing.setText(plantInfo.getRowSpacing());
+        rowSpacing.setText("Row Spacing: " + plantInfo.getRowSpacing() + "cm");
         spread = findViewById(R.id.spreadTextView);
-        spread.setText(plantInfo.getSpread());
+        spread.setText("Spread: " + plantInfo.getSpread() + "cm");
         ph_min_max = findViewById(R.id.ph_min_max_TextView);
-        ph_min_max.setText(plantInfo.getMin_ph() + " to " + plantInfo.getMax_ph());
+        ph_min_max.setText("Ph Range: " + plantInfo.getMin_ph() + " to " + plantInfo.getMax_ph());
         light = findViewById(R.id.lightTextView);
-        light.setText(plantInfo.getLight());
+        light.setText("Light: " + plantInfo.getLight());
         precipitation_min_max = findViewById(R.id.precipitation_min_maxTextView);
-        precipitation_min_max.setText(plantInfo.getMin_precipitation() + " to " + plantInfo.getMax_precipitation());
+        precipitation_min_max.setText("Precipitation Range: " + plantInfo.getMin_precipitation() + "mm" + " to " + plantInfo.getMax_precipitation() + "mm");
         min_root_depth = findViewById(R.id.min_root_depthTextView);
-        min_root_depth.setText(plantInfo.getMin_root_depth());
+        min_root_depth.setText("Minimum Root Depth: " + plantInfo.getMin_root_depth() + "cm");
         temperature_min_max = findViewById(R.id.temperature_min_max_TextView);
-        temperature_min_max.setText(plantInfo.getMin_temperature() + " to " + plantInfo.getMax_temperature());
+        temperature_min_max.setText("Temperature Range: " + plantInfo.getMin_temperature() + "\u2103" + " to " + plantInfo.getMax_temperature() + "\u2103");
 
 
     }
@@ -129,6 +129,20 @@ public class SpecificPlantInfo extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(jsonStr);
                     JSONObject plants = jsonObject.getJSONObject("data");
 
+                    JSONObject main_species = plants.getJSONObject("main_species");
+                    JSONObject growth = main_species.getJSONObject("growth");
+
+                    JSONObject row_spacing = growth.getJSONObject("row_spacing");
+                    JSONObject spread = growth.getJSONObject("spread");
+
+                    JSONObject minimum_precipitation = growth.getJSONObject("minimum_precipitation");
+                    JSONObject maximum_precipitation = growth.getJSONObject("maximum_precipitation");
+                    JSONObject minimum_root_depth = growth.getJSONObject("minimum_root_depth");
+                    JSONObject minimum_temperature = growth.getJSONObject("minimum_temperature");
+                    JSONObject maximum_temperature = growth.getJSONObject("maximum_temperature");
+
+                    System.out.println("Printing JSON: " + plants);
+
                         plantInfo = new PlantInfo(
                         plant_id,
                         plants.getString("common_name"),
@@ -136,17 +150,19 @@ public class SpecificPlantInfo extends AppCompatActivity {
                         plants.getString("family_common_name"),
                         plants.getString("image_url"),
                         plants.getBoolean("vegetable"),
-                        plants.getInt("main_species.growth.days_to_harvest"),
-                        plants.getString("main_species.growth.row_spacing.cm"),
-                        plants.getString("main_species.growth.spread.cm"),
-                        plants.getInt("main_species.growth.ph_minimum"),
-                        plants.getInt("main_species.growth.ph_maximum"),
-                        plants.getInt("main_species.growth.light"),
-                        plants.getInt("main_species.growth.minumum_precipitation.mm"),
-                        plants.getInt("main_species.growth.maximum_precipitation.mm"),
-                        plants.getInt("main_species.growth.minimum_root_depth.cm"),
-                        plants.getInt("main_species.growth.minimum_temperature.deg_c"),
-                        plants.getInt("main_species.growth.maximum_temperature.deg_c"));
+                        growth.getString("days_to_harvest"),
+                        row_spacing.getString("cm"),
+                        spread.getString("cm"),
+                        growth.getString("ph_minimum"),
+                        growth.getString("ph_maximum"),
+                        growth.getString("light"),
+                        minimum_precipitation.getString("mm"),
+                        maximum_precipitation.getString("mm"),
+                        minimum_root_depth.getString("cm"),
+                        minimum_temperature.getString("deg_c"),
+                        maximum_temperature.getString("deg_c"));
+
+                        System.out.println("Printing plant Object" + plantInfo);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
