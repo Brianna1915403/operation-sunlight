@@ -1,4 +1,4 @@
-package com.example.operationsunlight;
+package com.example.operationsunlight.ui.weather;
 
 public class Weather {
 
