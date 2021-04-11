@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -48,7 +49,7 @@ public class CatalogueActivity extends AppCompatActivity {
     private boolean isAscendingOrder = true;
     private int currentPage = 1;
 
-    Button searchBTN, nextBTN, previousBTN;
+    Button searchBTN, nextBTN, previousBTN, goToWeather;
     EditText searchBar;
     ToggleButton ascendingOrder;
     TextView pageNum;
@@ -68,6 +69,7 @@ public class CatalogueActivity extends AppCompatActivity {
         searchBTN = findViewById(R.id.searchButton);
         nextBTN = findViewById(R.id.nextPageButton);
         previousBTN = findViewById(R.id.previousPageButton);
+        goToWeather = findViewById(R.id.goToWeather);
 
         searchBar = findViewById(R.id.searchBar);
         ascendingOrder = findViewById(R.id.ascendingOrder_ToggleButton);
@@ -147,6 +149,14 @@ public class CatalogueActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 pageNum.setText("Page " + currentPage + " out of " + max_pages);
+            }
+        });
+
+        goToWeather.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CatalogueActivity.this, WeatherForecast.class);
+                startActivity(intent);
             }
         });
 
