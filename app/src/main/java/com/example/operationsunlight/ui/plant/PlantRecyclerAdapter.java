@@ -39,8 +39,8 @@ public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdap
         Glide.with(mContext)
                 .asBitmap()
                 .load(plant_list.get(position).image_url)
-                .placeholder(R.drawable.ic_error_outline)
-                .error(R.drawable.ic_error_outline)
+                .placeholder(R.drawable.error_file)
+                .error(R.drawable.error_file)
                 .into(holder.image);
 
         holder.plant_id = plant_list.get(position).plant_id;
