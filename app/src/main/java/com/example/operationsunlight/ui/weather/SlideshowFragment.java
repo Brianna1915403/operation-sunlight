@@ -1,4 +1,4 @@
-package com.example.operationsunlight.ui.slideshow;
+package com.example.operationsunlight.ui.weather;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
