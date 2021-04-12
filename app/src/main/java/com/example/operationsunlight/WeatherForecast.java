@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -38,8 +39,9 @@ public class WeatherForecast extends AppCompatActivity implements LocationListen
 
     private static String url = "https://api.openweathermap.org/data/2.5/onecall?units=metric&exclude=minutely";
     private final static String apiKey = "&appid=b5aef5f8fe1f3f70de5080d2b9b58e9f";
-    private String lat = "&lat=";
-    private String lon = "&lon=";
+    // Currently set to MTL lat/long until gps is working.
+    private String lat = "&lat=45.5017";
+    private String lon = "&lon=-73.5673";
 
     private String final_request = "";
 
@@ -103,11 +105,27 @@ public class WeatherForecast extends AppCompatActivity implements LocationListen
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        lat = "&lat=";
-        lat += location.getLatitude();
 
-        lon = "&lon=";
-        lon += location.getLongitude();
+        double latitude = location.getLatitude();
+        lat += latitude;
+
+        double longitude = location.getLongitude();
+        lon += longitude;
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        Log.d("Latitude","disable");
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        Log.d("Latitude","enable");
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        Log.d("Latitude","status");
     }
 
 
