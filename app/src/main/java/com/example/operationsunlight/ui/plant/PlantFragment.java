@@ -76,23 +76,24 @@ public class PlantFragment extends Fragment implements onPlantListener {
         nextBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentPage < max_pages)
+                if(currentPage < max_pages) {
                     currentPage++;
-
-                final_request = url + (searchQuery.isEmpty()? token : search + searchQuery) + pagination + currentPage + sort + (isAscendingOrder? "asc" : "desc");
-                clearRecycler();
-                updateRecycler();
+                    final_request = url + (searchQuery.isEmpty() ? token : search + searchQuery) + pagination + currentPage + sort + (isAscendingOrder ? "asc" : "desc");
+                    clearRecycler();
+                    updateRecycler();
+                }
             }
         });
 
         previousBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentPage > 1)
+                if(currentPage > 1) {
                     currentPage--;
-                final_request = url + (searchQuery.isEmpty()? token : search + searchQuery) + pagination + currentPage + sort + (isAscendingOrder? "asc" : "desc");
-                clearRecycler();
-                updateRecycler();
+                    final_request = url + (searchQuery.isEmpty() ? token : search + searchQuery) + pagination + currentPage + sort + (isAscendingOrder ? "asc" : "desc");
+                    clearRecycler();
+                    updateRecycler();
+                }
             }
         });
 
@@ -124,7 +125,8 @@ public class PlantFragment extends Fragment implements onPlantListener {
         order.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                final_request = final_request.substring(0, final_request.lastIndexOf('=') + 1).concat(isChecked? "desc" : "asc");
+                isAscendingOrder = !isChecked;
+                final_request = final_request.substring(0, final_request.lastIndexOf('=') + 1).concat(isAscendingOrder? "asc" : "desc");
                 clearRecycler();
                 updateRecycler();
             }
