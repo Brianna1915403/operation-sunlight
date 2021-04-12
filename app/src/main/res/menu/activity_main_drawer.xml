@@ -10,15 +10,24 @@
             android:title="@string/menu_home" />
         <item
             android:id="@+id/nav_weather"
-            android:icon="@drawable/ic_menu_sun"
+            android:icon="@drawable/ic_menu_weather"
             android:title="@string/menu_weather" />
         <item
             android:id="@+id/nav_plant"
-            android:icon="@drawable/ic_menu_flower"
+            android:icon="@drawable/ic_menu_plant"
             android:title="@string/menu_plant" />
         <item
             android:id="@+id/nav_garden"
-            android:icon="@drawable/ic_menu_leaf"
+            android:icon="@drawable/ic_menu_garden"
             android:title="@string/menu_garden" />
+        <item
+            android:id="@+id/nav_greenhouse"
+            android:icon="@drawable/ic_menu_greenhouse"
+            android:title="@string/menu_greenhouse" />
+
+        <item
+            android:id="@+id/nav_note"
+            android:icon="@drawable/ic_menu_notes"
+            android:title="@string/menu_note" />
     </group>
 </menu>
