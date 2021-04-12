@@ -9,15 +9,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.operationsunlight.HTTPHandler;
 import com.example.operationsunlight.R;
+import com.example.operationsunlight.ui.plant.PlantRecyclerAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +33,9 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 public class WeatherFragment extends Fragment {
-    View root;
+
+    private View root;
+    private RecyclerView dailyRecycler, hourlyRecycler;
 
     private ProgressDialog progressDialog;
 
@@ -45,7 +52,10 @@ public class WeatherFragment extends Fragment {
 
     private String final_request = "";
 
-    TextView textView, textView2, textView3, textView4, textView5, textView6, textView7, textView8, textView9, textView10, textView11, textView12, textView13;
+    ImageView image;
+
+    TextView dateTime, temperature, feels, main, description, humidity,
+    uvi, clouds, sunrise, sunset, windSpeed, windDegree, rain;
 
     protected LocationManager locationManager;
     protected LocationListener locationListener;
@@ -56,9 +66,14 @@ public class WeatherFragment extends Fragment {
     public ArrayList<FutureWeather> hourly = new ArrayList<>();
     public ArrayList<FutureWeather> daily = new ArrayList<>();
 
+    private WeatherRecyclerAdapter adapter;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_weather, container, false);
+
+        dailyRecycler = root.findViewById(R.id.dailyRecycler);
+        hourlyRecycler = root.findViewById(R.id.hourlyRecycler);
 
 //        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 //        if (ActivityCompat.checkSelfPermission(root.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -75,7 +90,6 @@ public class WeatherFragment extends Fragment {
         // Set to current lat/lon through gps later.
 
         final_request = url + apiKey + lat + lon;
-        System.out.println(final_request);
 
         try {
             new GetWeather().execute().get();
@@ -85,54 +99,21 @@ public class WeatherFragment extends Fragment {
             e.printStackTrace();
         }
 
-        System.out.println(hourly);
-        System.out.println(daily);
+        image = root.findViewById(R.id.weather_image);
 
-//        textView = root.findViewById(R.id.textView);
-//        textView2 = root.findViewById(R.id.textView2);
-//        textView3 = root.findViewById(R.id.textView3);
-//        textView4 = root.findViewById(R.id.textView4);
-//        textView5 = root.findViewById(R.id.textView5);
-//        textView6 = root.findViewById(R.id.textView6);
-//        textView7 = root.findViewById(R.id.textView7);
-//        textView8 = root.findViewById(R.id.textView8);
-//        textView9 = root.findViewById(R.id.textView9);
-//        textView10 = root.findViewById(R.id.textView10);
-//        textView11 = root.findViewById(R.id.textView11);
-//        textView12 = root.findViewById(R.id.textView12);
-
-//        Date currentDtFormatted = new Date((long)currentWeather.datetime*1000);
-//        textView.setText(currentDtFormatted.toString());
-//
-//        Date currentSunriseFormatted = new Date((long)currentWeather.sunrise*1000);
-//        textView2.setText(currentSunriseFormatted.toString());
-//
-//        Date currentSunsetFormatted = new Date((long)currentWeather.sunset*1000);
-//        textView3.setText(currentSunsetFormatted.toString());
-//
-//        Double currentTemp = currentWeather.temp;
-//        textView4.setText(currentTemp.toString());
-//
-//        Double currentFeels = currentWeather.feels;
-//        textView5.setText(currentFeels.toString());
-//
-//        textView6.setText("" + currentWeather.humidity);
-//
-//        Double currentUVI = currentWeather.uvi;
-//        textView7.setText(currentUVI.toString());
-//
-//        textView8.setText("" + currentWeather.clouds);
-//
-//        Double currentWindSpeed = currentWeather.wind_speed;
-//        textView9.setText(currentWindSpeed.toString());
-//
-//        textView10.setText("" + currentWeather.wind_deg);
-//
-//        textView11.setText(currentWeather.main);
-//        textView12.setText(currentWeather.desc);
-
-
-
+        dateTime = root.findViewById(R.id.dateTimeTextView);
+        temperature = root.findViewById(R.id.temperatureTextView);
+        feels = root.findViewById(R.id.feelsLikeTextView);
+        main = root.findViewById(R.id.mainTextView);
+        description = root.findViewById(R.id.descriptionTextView);
+        humidity = root.findViewById(R.id.humidityTextView);
+        uvi = root.findViewById(R.id.uviTextView);
+        clouds = root.findViewById(R.id.cloudsTextView);
+        sunrise = root.findViewById(R.id.sunriseTextView);
+        sunset = root.findViewById(R.id.sunsetTextView);
+        windSpeed = root.findViewById(R.id.windSpeedTextView);
+        windDegree = root.findViewById(R.id.windDegreeTextView);
+        rain = root.findViewById(R.id.rainTextView);
 
         return root;
     }
@@ -140,6 +121,27 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Glide.with(root.getContext())
+                .asBitmap()
+                .load(currentWeather.getIcon())
+                .placeholder(R.drawable.error_file)
+                .error(R.drawable.error_file)
+                .into(image);
+
+        dateTime.setText("" + new Date((long)currentWeather.getDatetime()*1000));
+        temperature.setText("" + currentWeather.getTemp());
+        feels.setText("" + currentWeather.getFeels());
+        main.setText("" + currentWeather.getMain());
+        description.setText("" + currentWeather.getDesc());
+        humidity.setText("" + currentWeather.getHumidity());
+        uvi.setText("" + currentWeather.getUvi());
+        clouds.setText("" + currentWeather.getClouds());
+        sunrise.setText("" + new Date((long)currentWeather.getSunrise()*1000));
+        sunset.setText("" + new Date((long)currentWeather.getSunset()*1000));
+        windSpeed.setText("" + currentWeather.getWind_speed());
+        windDegree.setText("" + currentWeather.getWind_deg());
+        rain.setText("" + currentWeather.getRain());
+
     }
 
     private class GetWeather extends AsyncTask<Void, Void, Void> {
@@ -236,10 +238,15 @@ public class WeatherFragment extends Fragment {
             if (progressDialog.isShowing())
                 progressDialog.dismiss();
 
-//            adapter = new RecyclerViewAdapter(plant_list, CatalogueActivity.this);
-//            recyclerView.setAdapter(adapter);
-//            recyclerView.setHasFixedSize(true);
-//            recyclerView.setLayoutManager(new LinearLayoutManager(CatalogueActivity.this));
+            adapter = new WeatherRecyclerAdapter(daily, root.getContext());
+            dailyRecycler.setAdapter(adapter);
+            dailyRecycler.setHasFixedSize(true);
+            dailyRecycler.setLayoutManager(new LinearLayoutManager(root.getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+            adapter = new WeatherRecyclerAdapter(hourly, root.getContext());
+            hourlyRecycler.setAdapter(adapter);
+            hourlyRecycler.setHasFixedSize(true);
+            hourlyRecycler.setLayoutManager(new LinearLayoutManager(root.getContext(), LinearLayoutManager.HORIZONTAL, false));
 
 
         }

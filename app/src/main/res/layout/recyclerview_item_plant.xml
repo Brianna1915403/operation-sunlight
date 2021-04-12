@@ -32,11 +32,12 @@
             android:layout_height="match_parent">
 
             <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/scientific_name_label"
+                    android:id="@+id/percentageOfPrecipitationTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
@@ -55,11 +56,12 @@
             </TableRow>
 
             <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/family_common_name_label"
+                    android:id="@+id/temperatureTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
@@ -79,5 +81,4 @@
 
         </TableLayout>
     </LinearLayout>
-
 </LinearLayout>

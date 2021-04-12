@@ -37,7 +37,7 @@ public class PlantBioFragment extends Fragment {
 
     private ImageView plantImage;
     private TextView commonName, scientificName, familyCommonName,
-            isVegetable, isEdible, daysToHarvest, rowSpacing, spread,
+            isVegetable, daysToHarvest, rowSpacing, spread,
             ph_min_max, light, precipitation_min_max, min_root_depth,
             temperature_min_max;
 
