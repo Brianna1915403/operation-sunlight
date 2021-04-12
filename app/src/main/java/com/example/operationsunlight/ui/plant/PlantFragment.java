@@ -142,6 +142,12 @@ public class PlantFragment extends Fragment implements onPlantListener {
         updateRecycler();
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        final_request = "";
+    }
+
     private void updatePage() {
         max_pages = (totalResults / 20) + 1;
         pageNum.setText("Page " + currentPage + " out of " + max_pages);
