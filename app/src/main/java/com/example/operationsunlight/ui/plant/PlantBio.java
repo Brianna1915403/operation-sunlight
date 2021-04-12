@@ -1,7 +1,7 @@
 package com.example.operationsunlight.ui.plant;
 
 public class PlantBio extends Plant{
-    private boolean isVegetable;
+    private String isVegetable;
     private String daysToHarvest;
     private String rowSpacing;
     private String spread;
@@ -14,9 +14,9 @@ public class PlantBio extends Plant{
     private String min_temperature;
     private String max_temperature;
 
-    public PlantBio(Plant plant, boolean isVegetable, String daysToHarvest, String rowSpacing, String spread, String min_ph, String max_ph, String light, String min_precipitation, String max_precipitation, String min_root_depth, String min_temperature, String max_temperature) {
+    public PlantBio(Plant plant, String isVegetable, String daysToHarvest, String rowSpacing, String spread, String min_ph, String max_ph, String light, String min_precipitation, String max_precipitation, String min_root_depth, String min_temperature, String max_temperature) {
         super(plant);
-        this.isVegetable = isVegetable;
+        this.isVegetable = isVegetable.equals("null")? "N/A" : isVegetable.equalsIgnoreCase("true")? "Yes" : "No";
         this.daysToHarvest = daysToHarvest.equals("null")? "N/A" : daysToHarvest;
         this.rowSpacing = rowSpacing.equals("null")? "N/A" : rowSpacing;
         this.spread = spread.equals("null")? "N/A" : spread;
@@ -48,7 +48,7 @@ public class PlantBio extends Plant{
                 '}';
     }
 
-    public boolean isVegetable() {
+    public String isVegetable() {
         return isVegetable;
     }
 

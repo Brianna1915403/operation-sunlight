@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -60,83 +61,90 @@ public class PlantFragment extends Fragment implements onPlantListener {
         root = inflater.inflate(R.layout.fragment_plant, container, false);
         recyclerView = root.findViewById(R.id.plant_recyclerview);
         adapter = new PlantRecyclerAdapter(plant_list, root.getContext(), onPlantListener);
+
         searchView = root.findViewById(R.id.plant_search);
-        order = root.findViewById(R.id.sort_toggle);
-        nextBTN = root.findViewById(R.id.nextPageButton);
-        previousBTN = root.findViewById(R.id.previousPageButton);
-        pageNum = root.findViewById(R.id.pageNumberTextView);
-        System.out.println("Save instance: " + savedInstanceState);
-        return root;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        nextBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(currentPage < max_pages) {
-                    currentPage++;
-                    final_request = url + (searchQuery.isEmpty() ? token : search + searchQuery) + pagination + currentPage + sort + (isAscendingOrder ? "asc" : "desc");
-                    clearRecycler();
-                    updateRecycler();
-                }
-            }
-        });
-
-        previousBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(currentPage > 1) {
-                    currentPage--;
-                    final_request = url + (searchQuery.isEmpty() ? token : search + searchQuery) + pagination + currentPage + sort + (isAscendingOrder ? "asc" : "desc");
-                    clearRecycler();
-                    updateRecycler();
-                }
-            }
-        });
-
-        // Makes it so the entire search bar is clickable not just the icon
-        searchView.setOnClickListener(new View.OnClickListener() {
+        searchView.setOnClickListener(new View.OnClickListener() { // Makes it so the entire search bar is clickable not just the icon
             @Override
             public void onClick(View v) {
                 searchView.setIconified(false);
+            }
+        });
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                if(searchView.getQuery().toString().isEmpty()) {
+                    final_request = "";
+                    searchQuery = "";
+                    updateRecycler();
+                }
+                return false;
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchQuery = query;
-                isAscendingOrder = !order.isChecked();
                 currentPage = 1;
                 final_request = url + search + searchQuery + pagination + currentPage + sort + (isAscendingOrder? "asc" : "desc");
-                clearRecycler();
                 updateRecycler();
-                progressDialog.dismiss();
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
+            public boolean onQueryTextChange(String newText) { return false; }
         });
+
+        order = root.findViewById(R.id.sort_toggle);
         order.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isAscendingOrder = !isChecked;
                 final_request = final_request.substring(0, final_request.lastIndexOf('=') + 1).concat(isAscendingOrder? "asc" : "desc");
-                clearRecycler();
                 updateRecycler();
             }
         });
 
+        nextBTN = root.findViewById(R.id.nextPageButton);
+        nextBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentPage < max_pages) {
+                    currentPage++;
+                    final_request = url + (searchQuery.isEmpty() ? token : search + searchQuery) + pagination + currentPage + sort + (isAscendingOrder ? "asc" : "desc");
+                    updateRecycler();
+                    updatePage();
+                }
+            }
+        });
+
+        previousBTN = root.findViewById(R.id.previousPageButton);
+        previousBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentPage > 1) {
+                    currentPage--;
+                    final_request = url + (searchQuery.isEmpty() ? token : search + searchQuery) + pagination + currentPage + sort + (isAscendingOrder ? "asc" : "desc");
+                    updateRecycler();
+                    updatePage();
+                }
+            }
+        });
+
+        pageNum = root.findViewById(R.id.pageNumberTextView);
+
         isAscendingOrder = !order.isChecked();
-        if (final_request.isEmpty())
-            final_request = url + token + pagination + currentPage + sort + (isAscendingOrder ? "asc" : "desc");
-        clearRecycler();
-        new GetPlants().execute();
+        return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        updateRecycler();
+    }
+
+    private void updatePage() {
+        max_pages = (totalResults / 20) + 1;
+        pageNum.setText("Page " + currentPage + " out of " + max_pages);
     }
 
     private void clearRecycler() {
@@ -146,7 +154,13 @@ public class PlantFragment extends Fragment implements onPlantListener {
 
     private void updateRecycler() {
         try {
+            if (final_request.isEmpty())
+                final_request = url + token + pagination + currentPage + sort + (isAscendingOrder ? "asc" : "desc");
+            clearRecycler();
             new GetPlants().execute().get();
+            System.out.println("updateRecycler:: " + final_request);
+            updatePage();
+            progressDialog.dismiss();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -161,38 +175,34 @@ public class PlantFragment extends Fragment implements onPlantListener {
     }
 
     private class GetPlants extends AsyncTask<Void, Void, Void> {
+        final HTTPHandler handler = new HTTPHandler();
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = new ProgressDialog(root.getContext());
-            progressDialog.setMessage("Retrieving Data...");
+            progressDialog.setMessage("Loading Data...");
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            HTTPHandler handler = new HTTPHandler();
             String jsonStr = handler.makeServiceCall(final_request);
-            System.out.println(final_request);
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObject = new JSONObject(jsonStr);
-                    JSONArray plants = jsonObject.getJSONArray("data");
+                    JSONArray plantObjects = jsonObject.getJSONArray("data");
                     totalResults = jsonObject.getJSONObject("meta").getInt("total");
-                    System.out.println(totalResults);
-                    for (int i = 0; i < plants.length(); ++i) {
-                        JSONObject object = plants.getJSONObject(i);
-
+                    for (int i = 0; i < plantObjects.length(); ++i) {
+                        JSONObject plantObject = plantObjects.getJSONObject(i);
                         plant_list.add( new Plant(
-                                object.getInt("id"),
-                                object.getString("common_name"),
-                                object.getString("scientific_name"),
-                                object.getString("family_common_name"),
-                                object.getString("image_url")));
+                                plantObject.getInt("id"),
+                                plantObject.getString("common_name"),
+                                plantObject.getString("scientific_name"),
+                                plantObject.getString("family_common_name"),
+                                plantObject.getString("image_url")));
                     }
-                    System.out.println(plant_list);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -207,8 +217,6 @@ public class PlantFragment extends Fragment implements onPlantListener {
             recyclerView.setAdapter(adapter);
             recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-            max_pages = (totalResults / 20) + 1;
-            pageNum.setText("Page " + currentPage + " out of " + max_pages);
             progressDialog.dismiss();
         }
     }

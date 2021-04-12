@@ -83,7 +83,7 @@ public class PlantBioFragment extends Fragment {
         commonName.setText(plantBio.getCommon_name());
         scientificName.setText("Scientific Name: " + plantBio.getScientific_name());
         familyCommonName.setText("Family Common Name: " + plantBio.getFamily_common_name());
-        isVegetable.setText("Is vegetable: " + (plantBio.isVegetable() ? "Yes":"No"));
+        isVegetable.setText("Is vegetable: " + plantBio.isVegetable());
         daysToHarvest.setText("Days to Harvest: " + plantBio.getDaysToHarvest() + " days");
         rowSpacing.setText("Row Spacing: " + plantBio.getRowSpacing() + " cm");
         spread.setText("Spread: " + plantBio.getSpread() + " cm");
@@ -92,8 +92,6 @@ public class PlantBioFragment extends Fragment {
         precipitation_min_max.setText("Precipitation Range: " + plantBio.getMin_precipitation() + " mm" + " to " + plantBio.getMax_precipitation() + " mm");
         min_root_depth.setText("Minimum Root Depth: " + plantBio.getMin_root_depth() + " cm");
         temperature_min_max.setText("Temperature Range: " + plantBio.getMin_temperature() + " \u2103" + " to " + plantBio.getMax_temperature() + " \u2103");
-
-
     }
 
     private class GetPlantInfo extends AsyncTask<Void, Void, Void> {
@@ -137,7 +135,7 @@ public class PlantBioFragment extends Fragment {
 
                     plantBio = new PlantBio(
                             plant,
-                            jsonPlant.getBoolean("vegetable"),
+                            jsonPlant.getString("vegetable"),
                             growth.getString("days_to_harvest"),
                             row_spacing.getString("cm"),
                             spread.getString("cm"),
