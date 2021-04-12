@@ -81,11 +81,7 @@ public class PlantFragment extends Fragment implements onPlantListener {
 
                 final_request = url + (searchQuery.isEmpty()? token : search + searchQuery) + pagination + currentPage + sort + (isAscendingOrder? "asc" : "desc");
                 clearRecycler();
-                try {
-                    new GetPlants().execute().get();
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
+                updateRecycler();
             }
         });
 
@@ -96,11 +92,7 @@ public class PlantFragment extends Fragment implements onPlantListener {
                     currentPage--;
                 final_request = url + (searchQuery.isEmpty()? token : search + searchQuery) + pagination + currentPage + sort + (isAscendingOrder? "asc" : "desc");
                 clearRecycler();
-                try {
-                    new GetPlants().execute().get();
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
+                updateRecycler();
             }
         });
 
@@ -119,11 +111,7 @@ public class PlantFragment extends Fragment implements onPlantListener {
                 currentPage = 1;
                 final_request = url + search + searchQuery + pagination + currentPage + sort + (isAscendingOrder? "asc" : "desc");
                 clearRecycler();
-                try {
-                    new GetPlants().execute().get();
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
+                updateRecycler();
                 progressDialog.dismiss();
                 return false;
             }
@@ -138,11 +126,7 @@ public class PlantFragment extends Fragment implements onPlantListener {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 final_request = final_request.substring(0, final_request.lastIndexOf('=') + 1).concat(isChecked? "desc" : "asc");
                 clearRecycler();
-                try {
-                    new GetPlants().execute().get();
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
+                updateRecycler();
             }
         });
 
@@ -156,6 +140,14 @@ public class PlantFragment extends Fragment implements onPlantListener {
     private void clearRecycler() {
         plant_list.clear();
         adapter.notifyDataSetChanged();
+    }
+
+    private void updateRecycler() {
+        try {
+            new GetPlants().execute().get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
