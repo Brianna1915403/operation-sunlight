@@ -149,6 +149,7 @@ public class Weather {
     }
 
     public String getIconURL() {
+        iconURL = "http://openweathermap.org/img/wn/" + this.icon + "@2x.png";
         return iconURL;
     }
 
