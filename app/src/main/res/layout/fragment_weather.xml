@@ -52,12 +52,11 @@
             android:layout_height="fill_parent"
             android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/temperatureTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center"/>
+            <TextView
+                android:id="@+id/temperatureTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow
@@ -69,8 +68,7 @@
             android:id="@+id/feelsLikeTextView"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center" />
+            android:layout_weight="1" />
         </TableRow>
 
 
@@ -83,8 +81,7 @@
                 android:id="@+id/mainTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow
@@ -95,8 +92,7 @@
                 android:id="@+id/descriptionTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow
@@ -108,8 +104,7 @@
                 android:id="@+id/humidityTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow
@@ -120,8 +115,7 @@
                 android:id="@+id/uviTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow
@@ -133,8 +127,7 @@
                 android:id="@+id/cloudsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow
@@ -146,8 +139,7 @@
                 android:id="@+id/sunriseTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow
@@ -159,8 +151,7 @@
                 android:id="@+id/sunsetTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow
@@ -172,8 +163,7 @@
                 android:id="@+id/windSpeedTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow
@@ -185,8 +175,7 @@
                 android:id="@+id/windDegreeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
+                android:layout_weight="1" />
         </TableRow>
 
         <TableRow
@@ -198,8 +187,7 @@
                 android:id="@+id/rainTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center" />
+                android:layout_weight="1" />
         </TableRow>
 
 

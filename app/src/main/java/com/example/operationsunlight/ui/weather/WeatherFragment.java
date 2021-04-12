@@ -28,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
@@ -121,6 +122,9 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        SimpleDateFormat currentDateFormat = new SimpleDateFormat("E yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+
         Glide.with(root.getContext())
                 .asBitmap()
                 .load(currentWeather.getIcon())
@@ -128,19 +132,19 @@ public class WeatherFragment extends Fragment {
                 .error(R.drawable.error_file)
                 .into(image);
 
-        dateTime.setText("" + new Date((long)currentWeather.getDatetime()*1000));
-        temperature.setText("" + currentWeather.getTemp());
-        feels.setText("" + currentWeather.getFeels());
-        main.setText("" + currentWeather.getMain());
-        description.setText("" + currentWeather.getDesc());
-        humidity.setText("" + currentWeather.getHumidity());
-        uvi.setText("" + currentWeather.getUvi());
-        clouds.setText("" + currentWeather.getClouds());
-        sunrise.setText("" + new Date((long)currentWeather.getSunrise()*1000));
-        sunset.setText("" + new Date((long)currentWeather.getSunset()*1000));
-        windSpeed.setText("" + currentWeather.getWind_speed());
-        windDegree.setText("" + currentWeather.getWind_deg());
-        rain.setText("" + currentWeather.getRain());
+        dateTime.setText("" + currentDateFormat.format(new Date((long)currentWeather.getDatetime()*1000)));
+        temperature.setText("Current Temperature: " + currentWeather.getTemp() + "\u2103");
+        feels.setText("Feels Like: " + currentWeather.getFeels() + "\u2103");
+        main.setText("Condition: " + currentWeather.getMain());
+        description.setText("Specification: " + currentWeather.getDesc());
+        humidity.setText("Humidity: " + currentWeather.getHumidity() + "%");
+        uvi.setText("uvIndex: " + currentWeather.getUvi());
+        clouds.setText("Clouds: " + currentWeather.getClouds() + "%");
+        sunrise.setText("Sunrise: " + timeFormat.format(new Date((long)currentWeather.getSunrise()*1000)));
+        sunset.setText("Sunset: " + timeFormat.format(new Date((long)currentWeather.getSunset()*1000)));
+        windSpeed.setText("Wind Speed: " + currentWeather.getWind_speed() + "m/s");
+        windDegree.setText("Wind Degree: " + currentWeather.getWind_deg() + "\u00B0");
+        rain.setText("Rain (Past Hour): " + currentWeather.getRain() + "mm");
 
     }
 
@@ -198,14 +202,15 @@ public class WeatherFragment extends Fragment {
                                 currentRain,
                                 currentSnow
                     );
-
+                    SimpleDateFormat dayFormat = new SimpleDateFormat("E");
+                    SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
                     JSONArray hourlyWeather = jsonObject.getJSONArray("hourly");
                     for(int i = 0; i < hourlyWeather.length(); i++) {
                         JSONObject hour = hourlyWeather.getJSONObject(i);
                         futureWeather = new FutureWeather(
-                                    hour.getInt("dt"),
-                                    hour.getDouble("temp"),
-                                    hour.getInt("pop"),
+                                    hourFormat.format(new Date((long)hour.getInt("dt")*1000)),
+                                    hour.getDouble("temp") + "\u2103",
+                                "pop: " + hour.getInt("pop") + "%",
                                 "http://openweathermap.org/img/wn/" + hour.getJSONArray("weather").getJSONObject(0).getString("icon") + "@2x.png"
                         );
                         hourly.add(futureWeather);
@@ -216,9 +221,9 @@ public class WeatherFragment extends Fragment {
                         JSONObject day = dailyWeather.getJSONObject(i);
 
                         futureWeather = new FutureWeather(
-                                    day.getInt("dt"),
-                                    day.getJSONObject("temp").getDouble("day"),
-                                    day.getInt("pop"),
+                                    dayFormat.format(new Date((long)day.getInt("dt")*1000)),
+                                    day.getJSONObject("temp").getDouble("day") + "\u2103",
+                                    "pop: " + day.getInt("pop") + "%",
                                 "http://openweathermap.org/img/wn/" + day.getJSONArray("weather").getJSONObject(0).getString("icon") + "@2x.png"
                         );
                         daily.add(futureWeather);
