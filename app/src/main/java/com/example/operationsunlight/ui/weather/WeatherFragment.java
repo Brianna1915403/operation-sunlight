@@ -7,6 +7,8 @@ import android.graphics.ImageDecoder;
 import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,7 +45,7 @@ import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 public class WeatherFragment extends Fragment {
-
+    private boolean isConnected;
     private View root;
     private RecyclerView dailyRecycler, hourlyRecycler;
 
@@ -81,6 +83,11 @@ public class WeatherFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_weather, container, false);
+        ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(root.getContext().CONNECTIVITY_SERVICE);
+        isConnected = (manager.getNetworkInfo(manager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                manager.getNetworkInfo(manager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        if (!isConnected)
+            return root;
 
         dailyRecycler = root.findViewById(R.id.dailyRecycler);
         hourlyRecycler = root.findViewById(R.id.hourlyRecycler);
@@ -131,6 +138,8 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (!isConnected)
+            return;
         SimpleDateFormat currentDateFormat = new SimpleDateFormat("E yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         int weather_icon;
