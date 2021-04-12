@@ -1,11 +1,16 @@
 package com.example.operationsunlight.ui.weather;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
+import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +28,17 @@ import com.bumptech.glide.Glide;
 import com.example.operationsunlight.HTTPHandler;
 import com.example.operationsunlight.R;
 import com.example.operationsunlight.ui.plant.PlantRecyclerAdapter;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -100,7 +109,7 @@ public class WeatherFragment extends Fragment {
             e.printStackTrace();
         }
 
-        image = root.findViewById(R.id.weather_image);
+        image = root.findViewById(R.id.image);
 
         dateTime = root.findViewById(R.id.dateTimeTextView);
         temperature = root.findViewById(R.id.temperatureTextView);
@@ -124,11 +133,33 @@ public class WeatherFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         SimpleDateFormat currentDateFormat = new SimpleDateFormat("E yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        int weather_icon;
+        switch (currentWeather.getIcon()) {
+            case "01d": weather_icon = R.drawable.w01d_2x; break;
+            case "01n": weather_icon = R.drawable.w01n_2x; break;
+            case "02d": weather_icon = R.drawable.w02d_2x; break;
+            case "02n": weather_icon = R.drawable.w02n_2x; break;
+            case "03d": weather_icon = R.drawable.w03d_2x; break;
+            case "03n": weather_icon = R.drawable.w03n_2x; break;
+            case "04n": weather_icon = R.drawable.w04n_2x; break;
+            case "04d": weather_icon = R.drawable.w04d_2x; break;
+            case "09d": weather_icon = R.drawable.w09d_2x; break;
+            case "09n": weather_icon = R.drawable.w09n_2x; break;
+            case "10d": weather_icon = R.drawable.w10d_2x; break;
+            case "10n": weather_icon = R.drawable.w10n_2x; break;
+            case "11d": weather_icon = R.drawable.w11d_2x; break;
+            case "11n": weather_icon = R.drawable.w11n_2x; break;
+            case "13d": weather_icon = R.drawable.w13d_2x; break;
+            case "13n": weather_icon = R.drawable.w13n_2x; break;
+            case "50d": weather_icon = R.drawable.w50d_2x; break;
+            case "50n": weather_icon = R.drawable.w50n_2x; break;
+            default: weather_icon = R.drawable.ic_error_outline; break;
+        }
 
         Glide.with(root.getContext())
                 .asBitmap()
-                .load(currentWeather.getIcon())
-                .placeholder(R.drawable.error_file)
+                .load(weather_icon)
+                .placeholder(R.drawable.loading_icon)
                 .error(R.drawable.error_file)
                 .into(image);
 
@@ -145,7 +176,6 @@ public class WeatherFragment extends Fragment {
         windSpeed.setText("Wind Speed: " + currentWeather.getWind_speed() + "m/s");
         windDegree.setText("Wind Degree: " + currentWeather.getWind_deg() + "\u00B0");
         rain.setText("Rain (Past Hour): " + currentWeather.getRain() + "mm");
-
     }
 
     private class GetWeather extends AsyncTask<Void, Void, Void> {
@@ -211,7 +241,7 @@ public class WeatherFragment extends Fragment {
                                     hourFormat.format(new Date((long)hour.getInt("dt")*1000)),
                                     hour.getDouble("temp") + "\u2103",
                                 "pop: " + hour.getInt("pop") + "%",
-                                "http://openweathermap.org/img/wn/" + hour.getJSONArray("weather").getJSONObject(0).getString("icon") + "@2x.png"
+                                 hour.getJSONArray("weather").getJSONObject(0).getString("icon")
                         );
                         hourly.add(futureWeather);
                     }
@@ -224,7 +254,7 @@ public class WeatherFragment extends Fragment {
                                     dayFormat.format(new Date((long)day.getInt("dt")*1000)),
                                     day.getJSONObject("temp").getDouble("day") + "\u2103",
                                     "pop: " + day.getInt("pop") + "%",
-                                "http://openweathermap.org/img/wn/" + day.getJSONArray("weather").getJSONObject(0).getString("icon") + "@2x.png"
+                                day.getJSONArray("weather").getJSONObject(0).getString("icon")
                         );
                         daily.add(futureWeather);
                     }

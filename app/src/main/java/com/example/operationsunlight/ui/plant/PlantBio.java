@@ -16,18 +16,18 @@ public class PlantBio extends Plant{
 
     public PlantBio(Plant plant, String isVegetable, String daysToHarvest, String rowSpacing, String spread, String min_ph, String max_ph, String light, String min_precipitation, String max_precipitation, String min_root_depth, String min_temperature, String max_temperature) {
         super(plant);
-        this.isVegetable = isVegetable.equals("null")? "N/A" : isVegetable.equalsIgnoreCase("true")? "Yes" : "No";
-        this.daysToHarvest = daysToHarvest.equals("null")? "N/A" : daysToHarvest;
-        this.rowSpacing = rowSpacing.equals("null")? "N/A" : rowSpacing;
-        this.spread = spread.equals("null")? "N/A" : spread;
-        this.min_ph = min_ph.equals("null")? "N/A" : min_ph;
-        this.max_ph = max_ph.equals("null")? "N/A" : max_ph;
-        this.light = light.equals("null")? "N/A" : light;
-        this.min_precipitation = min_precipitation.equals("null")? "N/A" : min_precipitation;
-        this.max_precipitation = max_precipitation.equals("null")? "N/A" : max_precipitation;
-        this.min_root_depth = min_root_depth.equals("null")? "N/A" : min_root_depth;
-        this.min_temperature = min_temperature.equals("null")? "N/A" : min_temperature;
-        this.max_temperature = max_temperature.equals("null")? "N/A" : max_temperature;
+        this.isVegetable = isVegetable.equals("null")? "Unknown" : isVegetable.equalsIgnoreCase("true")? "Yes" : "No";
+        this.daysToHarvest = daysToHarvest.equals("null")? "Unknown" : daysToHarvest;
+        this.rowSpacing = rowSpacing.equals("null")? "Unknown" : rowSpacing;
+        this.spread = spread.equals("null")? "Unknown" : spread;
+        this.min_ph = min_ph.equals("null")? "Unknown" : min_ph;
+        this.max_ph = max_ph.equals("null")? "Unknown" : max_ph;
+        this.light = light.equals("null")? "Unknown" : light;
+        this.min_precipitation = min_precipitation.equals("null")? "Unknown" : min_precipitation;
+        this.max_precipitation = max_precipitation.equals("null")? "Unknown" : max_precipitation;
+        this.min_root_depth = min_root_depth.equals("null")? "Unknown" : min_root_depth;
+        this.min_temperature = min_temperature.equals("null")? "Unknown" : min_temperature;
+        this.max_temperature = max_temperature.equals("null")? "Unknown" : max_temperature;
     }
 
     @Override

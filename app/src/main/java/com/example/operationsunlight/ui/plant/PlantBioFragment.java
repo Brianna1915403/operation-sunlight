@@ -1,6 +1,9 @@
 package com.example.operationsunlight.ui.plant;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
+import android.graphics.Picture;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -80,6 +83,7 @@ public class PlantBioFragment extends Fragment {
                 .placeholder(R.drawable.ic_error_outline)
                 .error(R.drawable.ic_error_outline)
                 .into(plantImage);
+
         commonName.setText(plantBio.getCommon_name());
         scientificName.setText("Scientific Name: " + plantBio.getScientific_name());
         familyCommonName.setText("Family Common Name: " + plantBio.getFamily_common_name());

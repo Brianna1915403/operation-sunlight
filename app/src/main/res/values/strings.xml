@@ -11,6 +11,8 @@
     <string name="menu_home">Home</string>
     <string name="menu_plant">Plant Catalogue</string>
     <string name="menu_weather">Weather Forecast</string>
+    <string name="menu_plant_bio">Plant Bio</string>
+    <string name="menu_garden">Garden</string>
     <string name="sort_by_ascending">Sort By: Ascending</string>
     <string name="sort_by_descending">Sort By: Descending</string>
     <!-- TODO: Remove or change this placeholder text -->
