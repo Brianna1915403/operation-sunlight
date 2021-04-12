@@ -60,8 +60,6 @@ public class WeatherFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_weather, container, false);
 
-        currentWeather = new Weather();
-
 //        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 //        if (ActivityCompat.checkSelfPermission(root.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 //            // TODO: Consider calling
@@ -157,29 +155,35 @@ public class WeatherFragment extends Fragment {
             String jsonStr = handler.makeServiceCall(final_request);
             if (jsonStr != null) {
                 try {
+                    Double currentRain;
                     JSONObject jsonObject = new JSONObject(jsonStr);
                     JSONObject current = jsonObject.getJSONObject("current");
                     JSONArray current_weather = current.getJSONArray("weather");
-                    currentWeather.datetime = current.getInt("dt");
-                    currentWeather.sunrise = current.getInt("sunrise");
-                    currentWeather.sunset = current.getInt("sunset");
-                    currentWeather.temp = current.getDouble("temp");
-                    currentWeather.feels = current.getDouble("feels_like");
-                    currentWeather.humidity = current.getInt("humidity");
-                    currentWeather.uvi = current.getDouble("uvi");
-                    currentWeather.clouds = current.getInt("clouds");
-                    currentWeather.wind_speed = current.getDouble("wind_speed");
-                    currentWeather.wind_deg = current.getInt("wind_deg");
-                    currentWeather.main = current_weather.getJSONObject(0).getString("main");
-                    currentWeather.desc = current_weather.getJSONObject(0).getString("description");
-                    currentWeather.icon = current_weather.getJSONObject(0).getString("icon");
 
                     if(current.has("rain")) {
                         JSONObject current_rain = current.getJSONObject("rain");
-                        currentWeather.rain = current_rain.getDouble("1h");
+                        currentRain = current_rain.getDouble("1h");
                     } else {
-                        currentWeather.rain = 0;
+                        currentRain = 0.0;
                     }
+
+                    currentWeather = new Weather(current.getInt("dt"),
+                                current.getInt("sunrise"),
+                                current.getInt("sunset"),
+                                current.getDouble("temp"),
+                                current.getDouble("feels_like"),
+                                current.getInt("humidity"),
+                                current.getDouble("uvi"),
+                                current.getInt("clouds"),
+                                current.getDouble("wind_speed"),
+                                current.getInt("wind_deg"),
+                                current_weather.getJSONObject(0).getString("main"),
+                                current_weather.getJSONObject(0).getString("description"),
+                                current_weather.getJSONObject(0).getString("icon"),
+                                currentRain
+                    );
+
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
