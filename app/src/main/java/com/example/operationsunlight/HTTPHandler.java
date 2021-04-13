@@ -1,5 +1,11 @@
 package com.example.operationsunlight;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import androidx.fragment.app.FragmentActivity;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +17,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 public class HTTPHandler {
-
 
     public String makeServiceCall(String reqURL) {
         String response = null;
@@ -44,5 +49,12 @@ public class HTTPHandler {
             e.printStackTrace();
         }
         return builder.toString();
+    }
+
+    public static boolean hasInternetConnection(FragmentActivity activity, Context context) {
+        ConnectivityManager manager = (ConnectivityManager) activity.getSystemService(context.CONNECTIVITY_SERVICE);
+        boolean hasConnection = (manager.getNetworkInfo(manager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                manager.getNetworkInfo(manager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        return hasConnection;
     }
 }

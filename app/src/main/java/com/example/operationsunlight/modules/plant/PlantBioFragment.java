@@ -1,9 +1,6 @@
-package com.example.operationsunlight.ui.plant;
+package com.example.operationsunlight.modules.plant;
 
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
-import android.graphics.Picture;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -11,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.operationsunlight.HTTPHandler;
 import com.example.operationsunlight.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +29,7 @@ public class PlantBioFragment extends Fragment {
     private static final String TAG = "ARGS" ; // Can be removed only for debug purposes
     private View root;
     private PlantBio plantBio;
+    private Plant plant;
     private int plant_id;
 
     private static String url = "https://trefle.io/api/v1/plants/";
@@ -43,6 +41,7 @@ public class PlantBioFragment extends Fragment {
             isVegetable, daysToHarvest, rowSpacing, spread,
             ph_min_max, light, precipitation_min_max, min_root_depth,
             temperature_min_max;
+    private FloatingActionButton plant_btn;
 
     private ProgressDialog progressDialog;
 
@@ -65,6 +64,13 @@ public class PlantBioFragment extends Fragment {
         precipitation_min_max = root.findViewById(R.id.precipitation_min_maxTextView);
         min_root_depth = root.findViewById(R.id.min_root_depthTextView);
         temperature_min_max = root.findViewById(R.id.temperature_min_max_TextView);
+        plant_btn = root.findViewById(R.id.plant_floatingActionButton);
+        plant_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(root.getContext(), plant + " Planted!", Toast.LENGTH_LONG).show();
+            }
+        });
         return root;
     }
 
@@ -118,7 +124,7 @@ public class PlantBioFragment extends Fragment {
                     JSONObject jsonObject = new JSONObject(jsonStr);
                     JSONObject jsonPlant = jsonObject.getJSONObject("data");
 
-                    Plant plant = new Plant(
+                    plant = new Plant(
                             plant_id,
                             jsonPlant.getString("common_name"),
                             jsonPlant.getString("scientific_name"),

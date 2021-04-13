@@ -1,4 +1,4 @@
-package com.example.operationsunlight.ui.weather;
+package com.example.operationsunlight.modules.weather;
 
 public class FutureWeather {
 

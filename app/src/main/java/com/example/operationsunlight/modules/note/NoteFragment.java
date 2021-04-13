@@ -1,7 +1,9 @@
-package com.example.operationsunlight.ui.greenhouse;
+package com.example.operationsunlight.modules.note;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -10,8 +12,8 @@ import android.view.ViewGroup;
 
 import com.example.operationsunlight.R;
 
-public class GreenhouseFragment extends Fragment {
-    private View root;
+public class NoteFragment extends Fragment {
+    View root;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +21,12 @@ public class GreenhouseFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_greenhouse, container, false);
+        root = inflater.inflate(R.layout.fragment_note, container, false);
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 }

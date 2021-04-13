@@ -1,23 +1,23 @@
-package com.example.operationsunlight.ui.garden;
+package com.example.operationsunlight;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.example.operationsunlight.R;
-
-public class GardenFragment extends Fragment {
+public class NoConnectionFragment extends Fragment {
     View root;
+    SwipeRefreshLayout refreshLayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_garden, container, false);
+        root = inflater.inflate(R.layout.fragment_no_connection, container, false);
         return root;
     }
 

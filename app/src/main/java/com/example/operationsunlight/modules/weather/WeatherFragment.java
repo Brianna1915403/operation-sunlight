@@ -1,10 +1,7 @@
-package com.example.operationsunlight.ui.weather;
+package com.example.operationsunlight.modules.weather;
 
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ImageDecoder;
-import android.graphics.drawable.Drawable;
+import android.content.Context;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -12,7 +9,6 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,29 +19,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.operationsunlight.HTTPHandler;
 import com.example.operationsunlight.R;
-import com.example.operationsunlight.ui.plant.PlantRecyclerAdapter;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 public class WeatherFragment extends Fragment {
-    private boolean isConnected;
     private View root;
     private RecyclerView dailyRecycler, hourlyRecycler;
 
@@ -82,12 +74,11 @@ public class WeatherFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_weather, container, false);
-        ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(root.getContext().CONNECTIVITY_SERVICE);
-        isConnected = (manager.getNetworkInfo(manager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                manager.getNetworkInfo(manager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
-        if (!isConnected)
+        root = inflater.inflate(R.layout.fragment_no_connection, container, false);
+        if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()))
             return root;
+        else
+            root = inflater.inflate(R.layout.fragment_weather, container, false);
 
         dailyRecycler = root.findViewById(R.id.dailyRecycler);
         hourlyRecycler = root.findViewById(R.id.hourlyRecycler);
@@ -138,36 +129,14 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!isConnected)
+        if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()))
             return;
         SimpleDateFormat currentDateFormat = new SimpleDateFormat("E yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        int weather_icon;
-        switch (currentWeather.getIcon()) {
-            case "01d": weather_icon = R.drawable.w01d_2x; break;
-            case "01n": weather_icon = R.drawable.w01n_2x; break;
-            case "02d": weather_icon = R.drawable.w02d_2x; break;
-            case "02n": weather_icon = R.drawable.w02n_2x; break;
-            case "03d": weather_icon = R.drawable.w03d_2x; break;
-            case "03n": weather_icon = R.drawable.w03n_2x; break;
-            case "04n": weather_icon = R.drawable.w04n_2x; break;
-            case "04d": weather_icon = R.drawable.w04d_2x; break;
-            case "09d": weather_icon = R.drawable.w09d_2x; break;
-            case "09n": weather_icon = R.drawable.w09n_2x; break;
-            case "10d": weather_icon = R.drawable.w10d_2x; break;
-            case "10n": weather_icon = R.drawable.w10n_2x; break;
-            case "11d": weather_icon = R.drawable.w11d_2x; break;
-            case "11n": weather_icon = R.drawable.w11n_2x; break;
-            case "13d": weather_icon = R.drawable.w13d_2x; break;
-            case "13n": weather_icon = R.drawable.w13n_2x; break;
-            case "50d": weather_icon = R.drawable.w50d_2x; break;
-            case "50n": weather_icon = R.drawable.w50n_2x; break;
-            default: weather_icon = R.drawable.ic_error_outline; break;
-        }
 
         Glide.with(root.getContext())
                 .asBitmap()
-                .load(weather_icon)
+                .load(WeatherIcon.getWeatherIcon(currentWeather.getIcon()))
                 .placeholder(R.drawable.loading_icon)
                 .error(R.drawable.error_file)
                 .into(image);

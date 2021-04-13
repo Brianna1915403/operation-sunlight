@@ -1,4 +1,4 @@
-package com.example.operationsunlight.ui.plant;
+package com.example.operationsunlight.modules.plant;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -10,14 +10,12 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,10 +56,14 @@ public class PlantFragment extends Fragment implements onPlantListener {
     private static String final_request = "";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_plant, container, false);
+        root = inflater.inflate(R.layout.fragment_no_connection, container, false);
+        if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()))
+            return root;
+        else
+            root = inflater.inflate(R.layout.fragment_plant, container, false);
+
         recyclerView = root.findViewById(R.id.plant_recyclerview);
         adapter = new PlantRecyclerAdapter(plant_list, root.getContext(), onPlantListener);
-
         searchView = root.findViewById(R.id.plant_search);
         searchView.setOnClickListener(new View.OnClickListener() { // Makes it so the entire search bar is clickable not just the icon
             @Override
@@ -139,7 +141,17 @@ public class PlantFragment extends Fragment implements onPlantListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()))
+            return;
         updateRecycler();
+    }
+
+    @Override
+    public void onPlantClick(int plant_id) {
+        NavController navController = NavHostFragment.findNavController(this);
+        Bundle bundle = new Bundle();
+        bundle.putInt("plant_id", plant_id);
+        navController.navigate(R.id.nav_plant_bio, bundle);
     }
 
     @Override
@@ -170,14 +182,6 @@ public class PlantFragment extends Fragment implements onPlantListener {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onPlantClick(int plant_id) {
-        NavController navController = NavHostFragment.findNavController(this);
-        Bundle bundle = new Bundle();
-        bundle.putInt("plant_id", plant_id);
-        navController.navigate(R.id.nav_plant_bio, bundle);
     }
 
     private class GetPlants extends AsyncTask<Void, Void, Void> {

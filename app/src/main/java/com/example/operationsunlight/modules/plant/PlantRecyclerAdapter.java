@@ -1,4 +1,4 @@
-package com.example.operationsunlight.ui.plant;
+package com.example.operationsunlight.modules.plant;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

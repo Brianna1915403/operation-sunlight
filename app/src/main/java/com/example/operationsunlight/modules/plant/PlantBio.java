@@ -1,4 +1,4 @@
-package com.example.operationsunlight.ui.plant;
+package com.example.operationsunlight.modules.plant;
 
 public class PlantBio extends Plant{
     private String isVegetable;
