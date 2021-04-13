@@ -40,8 +40,9 @@ public class PlantBioFragment extends Fragment {
     private TextView commonName, scientificName, familyCommonName,
             isVegetable, daysToHarvest, rowSpacing, spread,
             ph_min_max, light, precipitation_min_max, min_root_depth,
-            temperature_min_max;
-    private FloatingActionButton plant_btn;
+            temperature_min_max, plant_fab_label, note_fab_label;
+    private FloatingActionButton menu_fab, plant_fab, note_fab;
+    private boolean isFabVisible = false;
 
     private ProgressDialog progressDialog;
 
@@ -64,11 +65,36 @@ public class PlantBioFragment extends Fragment {
         precipitation_min_max = root.findViewById(R.id.precipitation_min_maxTextView);
         min_root_depth = root.findViewById(R.id.min_root_depthTextView);
         temperature_min_max = root.findViewById(R.id.temperature_min_max_TextView);
-        plant_btn = root.findViewById(R.id.plant_floatingActionButton);
-        plant_btn.setOnClickListener(new View.OnClickListener() {
+        note_fab_label = root.findViewById(R.id.plant_note_fab_label);
+        note_fab = root.findViewById(R.id.plant_note_fab);
+        note_fab.setVisibility(View.GONE);
+        note_fab_label.setVisibility(View.GONE);
+        note_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Check if the user has this plant in their garden if not disable the button.
+                Toast.makeText(root.getContext(), "Notes to be Implemented!", Toast.LENGTH_LONG).show();
+            }
+        });
+        plant_fab_label = root.findViewById(R.id.plant_plant_fab_label);
+        plant_fab = root.findViewById(R.id.plant_plant_fab);
+        plant_fab.setVisibility(View.GONE);
+        plant_fab_label.setVisibility(View.GONE);
+        plant_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(root.getContext(), plant + " Planted!", Toast.LENGTH_LONG).show();
+            }
+        });
+        menu_fab = root.findViewById(R.id.plant_menu_fab);
+        menu_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isFabVisible = !isFabVisible;
+                note_fab.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
+                note_fab_label.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
+                plant_fab.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
+                plant_fab_label.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
             }
         });
         return root;
