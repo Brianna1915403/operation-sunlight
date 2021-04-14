@@ -46,4 +46,16 @@
         android:name="com.example.operationsunlight.modules.note.NoteFragment"
         android:label="@string/menu_note"
         tools:layout="@layout/fragment_note" />
+
+    <fragment
+        android:id="@+id/nav_greenhouse_controller"
+        android:name="com.example.operationsunlight.modules.bluetooth.BluetoothFragment"
+        android:label="@string/menu_bluetooth"
+        tools:layout="@layout/fragment_bluetooth" />
+
+    <fragment
+        android:id="@+id/nav_device_selection"
+        android:name="com.example.operationsunlight.modules.bluetooth.DeviceSelectionFragment"
+        android:label="@string/menu_device_selection"
+        tools:layout="@layout/fragment_device_selection" />
 </navigation>

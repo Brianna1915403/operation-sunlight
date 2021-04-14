@@ -31,7 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
-public class PlantFragment extends Fragment implements onPlantListener {
+public class PlantFragment extends Fragment implements OnPlantListener {
     private View root;
     private RecyclerView recyclerView;
     private PlantRecyclerAdapter adapter;
@@ -41,7 +41,7 @@ public class PlantFragment extends Fragment implements onPlantListener {
     private ImageButton nextBTN, previousBTN;
     private TextView pageNum;
     private ProgressDialog progressDialog;
-    private onPlantListener onPlantListener = this::onPlantClick;
+    private OnPlantListener onPlantListener = this::onPlantClick;
 
     private static String url = "https://trefle.io/api/v1/plants";
     private final static String token = "?token=dZWkjKZTg7acXlHla7dapXq4-cAgxA4nU1eqHCA763M";

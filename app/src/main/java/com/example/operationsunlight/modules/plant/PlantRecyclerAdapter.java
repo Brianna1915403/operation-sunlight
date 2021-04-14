@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.operationsunlight.R;
 import com.squareup.picasso.Picasso;
 
@@ -18,11 +17,11 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdapter.ViewHolder>{
-    private onPlantListener onPlantListener;
+    private OnPlantListener onPlantListener;
     ArrayList<Plant> plant_list = new ArrayList<>();
     Context mContext;
 
-    public PlantRecyclerAdapter(ArrayList<Plant> plants, Context mContext, onPlantListener onPlantListener) {
+    public PlantRecyclerAdapter(ArrayList<Plant> plants, Context mContext, OnPlantListener onPlantListener) {
         this.plant_list = plants;
         this.mContext = mContext;
         this.onPlantListener = onPlantListener;
@@ -60,9 +59,9 @@ public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdap
         CircleImageView image;
         TextView common_name, scientific_name, family_common_name;
         LinearLayout parentLayout;
-        onPlantListener onPlantListener;
+        OnPlantListener onPlantListener;
 
-        public ViewHolder(@NonNull View itemView, onPlantListener onPlantListener) {
+        public ViewHolder(@NonNull View itemView, OnPlantListener onPlantListener) {
             super(itemView);
             this.onPlantListener = onPlantListener;
             image = itemView.findViewById(R.id.plant_image);

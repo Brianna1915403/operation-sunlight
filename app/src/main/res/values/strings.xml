@@ -22,5 +22,7 @@
     <string name="trefle_disclaimer">Data Brought to You By <a href="https://trefle.io/">Trefle</a></string>
     <string name="menu_greenhouse_controller">Controller</string>
     <string name="menu_greenhouse_view">View</string>
+    <string name="menu_bluetooth">Arduino Controller</string>
+    <string name="menu_device_selection">Bluetooth Device Selector</string>
 
 </resources>

@@ -1,5 +1,5 @@
 package com.example.operationsunlight.modules.plant;
 
-public interface onPlantListener {
+public interface OnPlantListener {
     void onPlantClick(int plant_id);
 }

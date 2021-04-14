@@ -39,8 +39,8 @@ public class SelectDeviceActivity extends AppCompatActivity {
             // Display paired device using recyclerView
             RecyclerView recyclerView = findViewById(R.id.recyclerViewDevice);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            DeviceListAdapter deviceListAdapter = new DeviceListAdapter(this,deviceList);
-            recyclerView.setAdapter(deviceListAdapter);
+//            DeviceRecyclerAdapter deviceRecyclerAdapter = new DeviceRecyclerAdapter(this,deviceList);
+//            recyclerView.setAdapter(deviceRecyclerAdapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
         } else {
             View view = findViewById(R.id.recyclerViewDevice);
