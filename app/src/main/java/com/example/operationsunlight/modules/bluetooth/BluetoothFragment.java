@@ -294,17 +294,6 @@ public class BluetoothFragment extends Fragment {
 
     /* ============================ Terminate Connection at BackPress ====================== */
 
-//    public void onBackPressed() {
-//        // Terminate Bluetooth Connection and close app
-//        if (createConnectThread != null){
-//            createConnectThread.cancel();
-//        }
-//        Intent a = new Intent(Intent.ACTION_MAIN);
-//        a.addCategory(Intent.CATEGORY_HOME);
-//        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(a);
-//    }
-
     @Override
     public void onDetach() {
         super.onDetach();
