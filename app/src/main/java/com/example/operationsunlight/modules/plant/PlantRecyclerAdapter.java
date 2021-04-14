@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.operationsunlight.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -36,17 +37,17 @@ public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdap
 
     @Override
     public void onBindViewHolder(@NonNull PlantRecyclerAdapter.ViewHolder holder, int position){
-        Glide.with(mContext)
-                .asBitmap()
-                .load(plant_list.get(position).image_url)
+        Plant plant = plant_list.get(position);
+        Picasso.get()
+                .load(plant.image_url)
                 .placeholder(R.drawable.error_file)
                 .error(R.drawable.error_file)
                 .into(holder.image);
-
-        holder.plant_id = plant_list.get(position).plant_id;
-        holder.common_name.setText(plant_list.get(position).common_name);
-        holder.scientific_name.setText(plant_list.get(position).scientific_name);
-        holder.family_common_name.setText(plant_list.get(position).family_common_name);
+        
+        holder.plant_id = plant.plant_id;
+        holder.common_name.setText(plant.common_name);
+        holder.scientific_name.setText(plant.scientific_name);
+        holder.family_common_name.setText(plant.family_common_name);
     }
 
     @Override

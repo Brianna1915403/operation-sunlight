@@ -33,7 +33,6 @@ public class HTTPHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return response;
     }
 

@@ -18,7 +18,9 @@
     <string name="sort_by_ascending">Sort By: Ascending</string>
     <string name="sort_by_descending">Sort By: Descending</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="trefle_disclaimer">Data Brought to You By <a href="https://trefle.io/">Trefle</a></string>
+    <string name="menu_greenhouse_controller">Controller</string>
+    <string name="menu_greenhouse_view">View</string>
 
 </resources>

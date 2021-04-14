@@ -3,6 +3,7 @@ package com.example.operationsunlight.modules.plant;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,8 @@ public class PlantFragment extends Fragment implements onPlantListener {
         else
             root = inflater.inflate(R.layout.fragment_plant, container, false);
 
+        TextView trefle_disclaimer = root.findViewById(R.id.plant_trefle_disclaimer);
+        trefle_disclaimer.setMovementMethod(LinkMovementMethod.getInstance());
         recyclerView = root.findViewById(R.id.plant_recyclerview);
         adapter = new PlantRecyclerAdapter(plant_list, root.getContext(), onPlantListener);
         searchView = root.findViewById(R.id.plant_search);

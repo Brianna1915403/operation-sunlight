@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".modules.plant.PlantBioFragment">
 
+    <TextView
+        android:id="@+id/plant_bio_trefle_disclaimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:text="@string/trefle_disclaimer"
+        android:textColorLink="@color/main_accent_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/plant_menu_fab"
         android:layout_width="wrap_content"
@@ -14,9 +27,9 @@
         android:layout_marginRight="20dp"
         android:layout_marginBottom="40dp"
         android:clickable="true"
-        android:src="@drawable/ic_fab_menu_plant"
+        android:src="@drawable/ic_fab_menu_menu"
         android:tooltipText="Plant Menu"
-        app:backgroundTint="@color/green"
+        app:backgroundTint="@color/main_accent_color"
         app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -44,7 +57,7 @@
         android:clickable="true"
         android:src="@drawable/ic_fab_menu_trowel"
         android:tooltipText="Add to Garden"
-        app:backgroundTint="@color/green"
+        app:backgroundTint="@color/main_accent_color"
         app:fabSize="auto"
         app:layout_constraintBottom_toTopOf="@id/plant_menu_fab"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -72,7 +85,7 @@
         android:clickable="true"
         android:src="@drawable/ic_fab_menu_note"
         android:tooltipText="Add a Note"
-        app:backgroundTint="@color/green"
+        app:backgroundTint="@color/main_accent_color"
         app:fabSize="auto"
         app:layout_constraintBottom_toTopOf="@id/plant_plant_fab"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -162,7 +175,6 @@
                 android:text="Is it a vegetable: " />
 
         </TableRow>
-
 
         <TableRow
             android:layout_width="0dp"

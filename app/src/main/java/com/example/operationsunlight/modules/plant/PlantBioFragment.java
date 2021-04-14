@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.operationsunlight.HTTPHandler;
 import com.example.operationsunlight.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -97,6 +99,8 @@ public class PlantBioFragment extends Fragment {
                 plant_fab_label.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
             }
         });
+        TextView trefle_disclaimer = root.findViewById(R.id.plant_bio_trefle_disclaimer);
+        trefle_disclaimer.setMovementMethod(LinkMovementMethod.getInstance());
         return root;
     }
 
@@ -109,13 +113,12 @@ public class PlantBioFragment extends Fragment {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-        Glide.with(root.getContext())
-                .asBitmap()
-                .load(plantBio.getImage_url())
-                .placeholder(R.drawable.ic_error_outline)
-                .error(R.drawable.ic_error_outline)
-                .into(plantImage);
 
+        Picasso.get()
+                .load(plantBio.getImage_url())
+                .placeholder(R.drawable.error_file)
+                .error(R.drawable.error_file)
+                .into(plantImage);
         commonName.setText(plantBio.getCommon_name());
         scientificName.setText("Scientific Name: " + plantBio.getScientific_name());
         familyCommonName.setText("Family Common Name: " + plantBio.getFamily_common_name());

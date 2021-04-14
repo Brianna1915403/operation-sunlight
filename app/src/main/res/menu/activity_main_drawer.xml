@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
@@ -8,6 +9,10 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_home"
             android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_note"
+            android:icon="@drawable/ic_menu_notes"
+            android:title="@string/menu_note" />
         <item
             android:id="@+id/nav_weather"
             android:icon="@drawable/ic_menu_weather"
@@ -21,13 +26,21 @@
             android:icon="@drawable/ic_menu_garden"
             android:title="@string/menu_garden" />
         <item
-            android:id="@+id/nav_greenhouse"
-            android:icon="@drawable/ic_menu_greenhouse"
-            android:title="@string/menu_greenhouse" />
+            android:title="@string/menu_greenhouse">
+            <menu>
+                <item
+                    android:id="@+id/nav_greenhouse_controller"
+                    android:icon="@drawable/ic_menu_greenhouse_controller"
+                    android:title="@string/menu_greenhouse_controller"/>
+                <item
+                    android:id="@+id/nav_greenhouse_view"
+                    android:icon="@drawable/ic_menu_greenhouse_view"
+                    android:title="@string/menu_greenhouse_view"/>
+            </menu>
+        </item>
 
-        <item
-            android:id="@+id/nav_note"
-            android:icon="@drawable/ic_menu_notes"
-            android:title="@string/menu_note" />
+
+
+
     </group>
 </menu>

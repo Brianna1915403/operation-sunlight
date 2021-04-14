@@ -26,10 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.operationsunlight.HTTPHandler;
 import com.example.operationsunlight.R;
-<<<<<<< Updated upstream:app/src/main/java/com/example/operationsunlight/modules/weather/WeatherFragment.java
-=======
-import com.example.operationsunlight.ui.plant.PlantRecyclerAdapter;
->>>>>>> Stashed changes:app/src/main/java/com/example/operationsunlight/ui/weather/WeatherFragment.java
 
 import org.json.JSONArray;
 import org.json.JSONException;
