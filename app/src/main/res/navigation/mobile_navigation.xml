@@ -58,4 +58,10 @@
         android:name="com.example.operationsunlight.modules.bluetooth.DeviceSelectionFragment"
         android:label="@string/menu_device_selection"
         tools:layout="@layout/fragment_device_selection" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.operationsunlight.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

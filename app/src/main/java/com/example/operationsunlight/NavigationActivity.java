@@ -51,8 +51,12 @@ public class NavigationActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.onNavDestinationSelected(item, navController)
-                || super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                navController.navigate(R.id.nav_settings);
+                return true;
+            default: return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
