@@ -1,5 +1,6 @@
 package com.example.operationsunlight;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,12 +20,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class NavigationActivity extends AppCompatActivity {
-
+    private SharedPreferences preferences;
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferences = getSharedPreferences("PREFERENCES", MODE_PRIVATE);
+        int theme_id = preferences.getInt("THEME_ID", R.style.Theme_OperationSunlight_NoActionBar);
+        setTheme(theme_id);
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
