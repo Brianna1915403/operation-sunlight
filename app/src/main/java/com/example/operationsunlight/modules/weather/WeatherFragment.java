@@ -131,7 +131,7 @@ public class WeatherFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()))
             return;
-        SimpleDateFormat currentDateFormat = new SimpleDateFormat("E yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat currentDateFormat = new SimpleDateFormat("E MMM d HH:mm a");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
 
         Glide.with(root.getContext())
@@ -142,9 +142,9 @@ public class WeatherFragment extends Fragment {
                 .into(image);
 
         dateTime.setText("" + currentDateFormat.format(new Date((long)currentWeather.getDatetime()*1000)));
-        temperature.setText("Current Temperature: " + currentWeather.getTemp() + "\u2103");
-        feels.setText("Feels Like: " + currentWeather.getFeels() + "\u2103");
-        main.setText("Condition: " + currentWeather.getMain());
+        temperature.setText((int) Math.round(currentWeather.getTemp()) + "\u2103");
+        feels.setText("Feels Like: " + (int) Math.round(currentWeather.getFeels()) + "\u2103");
+        main.setText(currentWeather.getMain());
         description.setText("Specification: " + currentWeather.getDesc());
         humidity.setText("Humidity: " + currentWeather.getHumidity() + "%");
         uvi.setText("uvIndex: " + currentWeather.getUvi());
@@ -210,14 +210,14 @@ public class WeatherFragment extends Fragment {
                                 currentRain,
                                 currentSnow
                     );
-                    SimpleDateFormat dayFormat = new SimpleDateFormat("E");
-                    SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+                    SimpleDateFormat dayFormat = new SimpleDateFormat("E MMM d");
+                    SimpleDateFormat hourFormat = new SimpleDateFormat("E HH:mm");
                     JSONArray hourlyWeather = jsonObject.getJSONArray("hourly");
                     for(int i = 0; i < hourlyWeather.length(); i++) {
                         JSONObject hour = hourlyWeather.getJSONObject(i);
                         futureWeather = new FutureWeather(
                                     hourFormat.format(new Date((long)hour.getInt("dt")*1000)),
-                                    hour.getDouble("temp") + "\u2103",
+                                (int) Math.round(hour.getDouble("temp")) + "\u2103",
                                 "pop: " + hour.getInt("pop") + "%",
                                  hour.getJSONArray("weather").getJSONObject(0).getString("icon")
                         );
@@ -230,7 +230,7 @@ public class WeatherFragment extends Fragment {
 
                         futureWeather = new FutureWeather(
                                     dayFormat.format(new Date((long)day.getInt("dt")*1000)),
-                                    day.getJSONObject("temp").getDouble("day") + "\u2103",
+                                (int) Math.round(day.getJSONObject("temp").getDouble("day")) + "\u2103",
                                     "pop: " + day.getInt("pop") + "%",
                                 day.getJSONArray("weather").getJSONObject(0).getString("icon")
                         );
