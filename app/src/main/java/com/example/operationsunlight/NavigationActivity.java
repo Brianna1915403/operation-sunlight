@@ -1,6 +1,7 @@
 package com.example.operationsunlight;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +11,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.customview.widget.Openable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -27,8 +29,8 @@ public class NavigationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preferences = getSharedPreferences("PREFERENCES", MODE_PRIVATE);
-        int theme_id = preferences.getInt("THEME_ID", R.style.Theme_OperationSunlight_NoActionBar);
-        setTheme(theme_id);
+        setTheme();
+        setDarkMode();
         setContentView(R.layout.activity_navigation);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,5 +70,16 @@ public class NavigationActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void setTheme() {
+        int theme_id = preferences.getInt("THEME_ID", R.style.Theme_OperationSunlight_NoActionBar);
+        setTheme(theme_id);
+    }
+
+    private void setDarkMode() {
+        boolean isDeviceDark = (this.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        boolean isDarkMode = preferences.getBoolean("IS_DARK_MODE", isDeviceDark);
+        AppCompatDelegate.setDefaultNightMode(isDarkMode? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
     }
 }

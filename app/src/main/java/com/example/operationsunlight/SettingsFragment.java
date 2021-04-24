@@ -31,6 +31,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class SettingsFragment extends Fragment {
     SharedPreferences sharedPreferences;
     int theme_id;
+    boolean isDarkMode;
     View root;
     ToggleButton dark_mode;
     Spinner theme;
@@ -39,20 +40,29 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root =  inflater.inflate(R.layout.fragment_settings, container, false);
+        sharedPreferences = getActivity().getSharedPreferences("PREFERENCES", MODE_PRIVATE);
+
+        // DARK MODE
         dark_mode = root.findViewById(R.id.dark_mode_togglebtn);
-        dark_mode.setChecked((root.getContext().getResources().getConfiguration().uiMode &
-                Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES); // Checks if Dark mode is on
+        boolean isDeviceDark = (root.getContext().getResources().getConfiguration().uiMode &
+                Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        isDarkMode = sharedPreferences.getBoolean("IS_DARK_MODE", isDeviceDark);
+        dark_mode.setChecked(isDarkMode);
         dark_mode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 AppCompatDelegate.setDefaultNightMode(isChecked? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("IS_DARK_MODE", isChecked);
+                editor.apply();
             }
         });
+
+        // THEME
         theme = (Spinner) root.findViewById(R.id.theme_spinner);
         adapter = ArrayAdapter.createFromResource(getContext(), R.array.themes, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         theme.setAdapter(adapter);
-        sharedPreferences = getActivity().getSharedPreferences("PREFERENCES", MODE_PRIVATE);
         theme_id = sharedPreferences.getInt("THEME_ID", R.style.Theme_OperationSunlight_NoActionBar);
         theme.setSelection(themeIDToPosition(theme_id));
         theme.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -68,9 +78,7 @@ public class SettingsFragment extends Fragment {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
         return root;
     }
