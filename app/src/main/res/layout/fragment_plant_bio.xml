@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:text="@string/trefle_disclaimer"
-        android:textColorLink="@color/main_accent_color"
+        android:textColorLink="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -27,7 +27,7 @@
         android:clickable="true"
         android:src="@drawable/ic_fab_menu_menu"
         android:tooltipText="Plant Menu"
-        app:backgroundTint="@color/main_accent_color"
+        app:backgroundTint="?attr/colorPrimary"
         app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -55,7 +55,7 @@
         android:clickable="true"
         android:src="@drawable/ic_fab_menu_trowel"
         android:tooltipText="Add to Garden"
-        app:backgroundTint="@color/main_accent_color"
+        app:backgroundTint="?attr/colorPrimary"
         app:fabSize="auto"
         app:layout_constraintBottom_toTopOf="@id/plant_menu_fab"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -83,7 +83,7 @@
         android:clickable="true"
         android:src="@drawable/ic_fab_menu_note"
         android:tooltipText="Add a Note"
-        app:backgroundTint="@color/main_accent_color"
+        app:backgroundTint="?attr/colorPrimary"
         app:fabSize="auto"
         app:layout_constraintBottom_toTopOf="@id/plant_plant_fab"
         app:layout_constraintEnd_toEndOf="parent" />
