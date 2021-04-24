@@ -5,7 +5,6 @@
     android:id="@+id/constrainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/background_light"
     tools:context=".modules.bluetooth.BluetoothFragment">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

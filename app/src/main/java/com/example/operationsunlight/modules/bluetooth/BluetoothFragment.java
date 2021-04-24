@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.operationsunlight.R;
 
@@ -36,7 +37,7 @@ import java.util.UUID;
 public class BluetoothFragment extends Fragment {
     private final static int CONNECTING_STATUS = 1; // used in bluetooth handler to identify message status
     private final static int MESSAGE_READ = 2; // used in bluetooth handler to identify message update
-    private View root;
+    private static View root;
 
     private String device_name;
     private String device_address;
@@ -50,6 +51,7 @@ public class BluetoothFragment extends Fragment {
     private ProgressBar progressBar;
     private TextView textViewInfo;
     private ImageView imageView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -230,6 +232,7 @@ public class BluetoothFragment extends Fragment {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
+        public Handler mHandler;
 
         public ConnectedThread(BluetoothSocket socket) {
             mmSocket = socket;
@@ -246,6 +249,7 @@ public class BluetoothFragment extends Fragment {
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
         }
+
 
         public void run() {
             byte[] buffer = new byte[1024];  // buffer store for the stream
