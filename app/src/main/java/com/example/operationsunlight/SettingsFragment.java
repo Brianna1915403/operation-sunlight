@@ -1,6 +1,7 @@
 package com.example.operationsunlight;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.operationsunlight.modules.login.LoginActivity;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,8 +36,11 @@ public class SettingsFragment extends Fragment {
     int theme_id;
     boolean isDarkMode;
     View root;
+
     ToggleButton dark_mode;
     Spinner theme;
+    Button logout_button;
+
     ArrayAdapter<CharSequence> adapter;
 
     @Override
@@ -80,13 +86,21 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+
+        // LOGOUT
+        logout_button = root.findViewById(R.id.logout_button);
+        logout_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences preferences = getActivity().getSharedPreferences("ACCOUNT", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("USERNAME", null);
+                editor.putString("EMAIL", null);
+                editor.apply();
+                toLogin();
+            }
+        });
         return root;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
     }
 
     public int themeNameToID(String theme) {
@@ -103,5 +117,11 @@ public class SettingsFragment extends Fragment {
             case R.style.Theme_OperationSunlight_Blue_NoActionBar: return 1;
             default: return -1;
         }
+    }
+
+    private void toLogin() {
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }

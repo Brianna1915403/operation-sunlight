@@ -38,9 +38,5 @@
                     android:title="@string/menu_greenhouse_view"/>
             </menu>
         </item>
-
-
-
-
     </group>
 </menu>

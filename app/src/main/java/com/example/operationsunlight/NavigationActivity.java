@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -36,6 +37,12 @@ public class NavigationActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        preferences = getSharedPreferences("ACCOUNT", MODE_PRIVATE);
+        View header = navigationView.getHeaderView(0);
+        TextView nav_username = header.findViewById(R.id.nav_username);
+        nav_username.setText(preferences.getString("USERNAME", null));
+        TextView nav_email = header.findViewById(R.id.nav_email);
+        nav_email.setText(preferences.getString("EMAIL", null));
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
