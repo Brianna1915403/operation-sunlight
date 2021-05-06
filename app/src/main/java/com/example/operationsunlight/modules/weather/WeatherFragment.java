@@ -2,6 +2,7 @@ package com.example.operationsunlight.modules.weather;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -37,8 +38,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class WeatherFragment extends Fragment {
     private View root;
+    SharedPreferences preferences;
     private RecyclerView dailyRecycler, hourlyRecycler;
 
     private ProgressDialog progressDialog;
@@ -75,9 +79,13 @@ public class WeatherFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_no_connection, container, false);
+        preferences = getActivity().getSharedPreferences("ACCOUNT", MODE_PRIVATE);
         if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()))
             return root;
-        else
+        else if (preferences.getString("USERNAME", null) == null) {
+            root = inflater.inflate(R.layout.fragment_need_sign_in, container, false);
+            return root;
+        } else
             root = inflater.inflate(R.layout.fragment_weather, container, false);
 
         dailyRecycler = root.findViewById(R.id.dailyRecycler);
@@ -129,7 +137,7 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()))
+        if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()) || preferences.getString("USERNAME", null) == null)
             return;
         SimpleDateFormat currentDateFormat = new SimpleDateFormat("E MMM d HH:mm a");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");

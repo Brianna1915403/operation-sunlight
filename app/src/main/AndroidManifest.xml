@@ -18,10 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OperationSunlight">
         <activity android:name=".modules.login.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".modules.bluetooth.SelectDeviceActivity" />
         <activity android:name=".modules.bluetooth.BluetoothActivity" />
@@ -29,7 +25,10 @@
             android:name=".NavigationActivity"
             android:label="@string/title_activity_navigation"
             android:theme="@style/Theme.OperationSunlight.NoActionBar">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

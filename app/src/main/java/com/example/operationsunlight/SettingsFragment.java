@@ -86,20 +86,6 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-
-        // LOGOUT
-        logout_button = root.findViewById(R.id.logout_button);
-        logout_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences preferences = getActivity().getSharedPreferences("ACCOUNT", MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("USERNAME", null);
-                editor.putString("EMAIL", null);
-                editor.apply();
-                toLogin();
-            }
-        });
         return root;
     }
 
@@ -117,11 +103,5 @@ public class SettingsFragment extends Fragment {
             case R.style.Theme_OperationSunlight_Blue_NoActionBar: return 1;
             default: return -1;
         }
-    }
-
-    private void toLogin() {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
     }
 }

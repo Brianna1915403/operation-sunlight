@@ -1,5 +1,6 @@
 package com.example.operationsunlight.modules.note;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 
 import com.example.operationsunlight.R;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class NoteFragment extends Fragment {
     View root;
     @Override
@@ -21,7 +24,12 @@ public class NoteFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_note, container, false);
+        root = inflater.inflate(R.layout.fragment_need_sign_in, container, false);
+        SharedPreferences preferences = getActivity().getSharedPreferences("ACCOUNT", MODE_PRIVATE);
+        if (preferences.getString("USERNAME", null) == null)
+            return root;
+        else
+            root = inflater.inflate(R.layout.fragment_note, container, false);
         return root;
     }
 

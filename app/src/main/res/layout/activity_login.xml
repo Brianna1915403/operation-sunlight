@@ -7,22 +7,36 @@
     android:orientation="vertical"
     tools:context=".modules.login.LoginActivity">
 
-    <include
-        layout="@layout/operation_sunlight_header"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent">
 
-    <fragment
-        android:id="@+id/fragment"
-        android:name="com.example.operationsunlight.modules.login.LoginFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <fragment
-        android:id="@+id/fragment3"
-        android:name="com.example.operationsunlight.modules.login.RegisterFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"/>
+            <include
+                layout="@layout/operation_sunlight_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <fragment
+                android:id="@+id/fragment"
+                android:name="com.example.operationsunlight.modules.login.LoginFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1" />
+
+            <fragment
+                android:id="@+id/fragment3"
+                android:name="com.example.operationsunlight.modules.login.RegisterFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>
