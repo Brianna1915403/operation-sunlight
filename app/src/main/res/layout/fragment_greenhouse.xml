@@ -87,7 +87,7 @@
                 android:gravity="center_horizontal"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="69\u2103"
+                android:text="NaN"
                 android:textSize="36sp" />
 
             <TextView
@@ -98,7 +98,7 @@
                 android:gravity="center_horizontal"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="100%"
+                android:text="NaN"
                 android:textSize="36sp" />
         </TableRow>
 
@@ -138,25 +138,25 @@
             android:paddingRight="5dp">
 
             <TextView
-                android:id="@+id/soilMoistureTextView"
+                android:id="@+id/soilMoistureValueTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="100%"
+                android:text="NaN"
                 android:textSize="36sp" />
 
             <TextView
-                android:id="@+id/lightLevelTextView"
+                android:id="@+id/lightLevelValueTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="100"
+                android:text="NaN"
                 android:textSize="36sp" />
         </TableRow>
     </TableLayout>

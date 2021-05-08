@@ -16,15 +16,12 @@ float humidity = 0;
 
 int moisture = 0;
 
-DS3231  rtc(SDA, SCL);
-
 void setup() {
   Serial.begin(9600);
-  EEBlue.begin(38400);
+  EEBlue.begin(9600);
   pinMode(13, OUTPUT);
   pinMode(10, OUTPUT);
   dht.begin();
-  rtc.begin();
   //synchronizeClock(15, 34, 45, 21, 4, 2021);
 }
 
@@ -33,8 +30,8 @@ void getSoilMoisture(){
 }
 
 void printSoilMoisture(){
-  Serial.print(F("Soil Moisture: "));
-  Serial.println(moisture);
+  Serial.print(F("Soil/"));
+  Serial.print(moisture);
 }
 
 void getLightLevel(){
@@ -42,8 +39,9 @@ void getLightLevel(){
 }
 
 void printLightLevel(){
-  Serial.print(F("Light Level: "));
-  Serial.println(lightSensorValue);
+  Serial.print(F("Light/"));
+  Serial.print(lightSensorValue);
+  Serial.print(F("/"));
 }
 
 void getTempHum(){
@@ -52,22 +50,37 @@ void getTempHum(){
 }
 
 void printTempHum(){
-  Serial.print(F("Humidity: "));
+  Serial.print(F("Humidity/"));
   Serial.print(humidity);
-  Serial.print(F("%  Temperature: "));
+  Serial.print(F("/"));
+  Serial.print(F("Temperature/"));
   Serial.print(temperature);
-  Serial.println(F("°C "));
+  Serial.print(F("/"));
 }
 
 void loop() {
+  
+  if (EEBlue.available()){
+      Serial.write(EEBlue.read());
+    
+  }
+      
+      
   getTempHum();
   getLightLevel();
   getSoilMoisture();
   printTempHum();
   printLightLevel();
   printSoilMoisture();
-  printTime();
-  delay(1000);
+  Serial.println(F("\n"));
+  
+  
+     
+      // Feed all data from termial to bluetooth
+  if (Serial.available())
+      EEBlue.write(Serial.read());
+  
+  delay(5000);
   
 
 }

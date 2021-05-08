@@ -3,10 +3,8 @@ package com.example.operationsunlight.modules.bluetooth;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -25,7 +23,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.operationsunlight.R;
 
@@ -48,7 +45,6 @@ public class BluetoothFragment extends Fragment {
 
     private Button buttonConnect, buttonToggle;
     private Toolbar toolbar;
-    private ProgressBar progressBar;
     private TextView textViewInfo;
     private ImageView imageView;
 
@@ -58,10 +54,8 @@ public class BluetoothFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_bluetooth, container, false);
         buttonConnect = root.findViewById(R.id.buttonConnect);
         toolbar = root.findViewById(R.id.toolbar);
-        progressBar = root.findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.GONE);
         textViewInfo = root.findViewById(R.id.textViewInfo);
-        buttonToggle = root.findViewById(R.id.buttonToggle);
+        buttonToggle = root.findViewById(R.id.lightsButtonToggle);
         buttonToggle.setEnabled(false);
         imageView = root.findViewById(R.id.imageView);
         imageView.setBackgroundColor(getResources().getColor(R.color.colorOff));
@@ -72,7 +66,6 @@ public class BluetoothFragment extends Fragment {
             if (device_name != null) {
                 device_address = bundle.getString("device_address");
                 toolbar.setSubtitle("Connecting to " + device_name + "...");
-                progressBar.setVisibility(View.VISIBLE);
                 buttonConnect.setEnabled(false);
                 /*
                 This is the most important piece of code. When "deviceName" is found
@@ -93,13 +86,11 @@ public class BluetoothFragment extends Fragment {
                         switch(msg.arg1){
                             case 1:
                                 toolbar.setSubtitle("Connected to " + device_name);
-                                progressBar.setVisibility(View.GONE);
                                 buttonConnect.setEnabled(true);
                                 buttonToggle.setEnabled(true);
                                 break;
                             case -1:
                                 toolbar.setSubtitle("Device fails to connect");
-                                progressBar.setVisibility(View.GONE);
                                 buttonConnect.setEnabled(true);
                                 break;
                         }
@@ -107,6 +98,7 @@ public class BluetoothFragment extends Fragment {
 
                     case MESSAGE_READ:
                         String arduinoMsg = msg.obj.toString(); // Read message from Arduino
+                        textViewInfo.setText("Arduino Message: " + arduinoMsg);
                         switch (arduinoMsg.toLowerCase()){
                             case "led is turned on":
                                 imageView.setBackgroundColor(getResources().getColor(R.color.colorOn));

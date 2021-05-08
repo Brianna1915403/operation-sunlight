@@ -3,10 +3,8 @@ package com.example.operationsunlight.modules.greenhouse;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -22,13 +20,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.operationsunlight.R;
-import com.example.operationsunlight.modules.bluetooth.BluetoothFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,12 +40,11 @@ public class GreenhouseFragment extends Fragment {
     private String device_address;
     public static Handler handler;
     public static BluetoothSocket mmSocket;
-    public static BluetoothFragment.ConnectedThread connectedThread;
-    public static BluetoothFragment.CreateConnectThread createConnectThread;
+    public static GreenhouseFragment.ConnectedThread connectedThread;
+    public static GreenhouseFragment.CreateConnectThread createConnectThread;
 
     private Button buttonConnect;
     private Toolbar toolbar;
-    private ProgressBar progressBar;
     private TextView textViewInfo;
 
 
@@ -61,21 +54,14 @@ public class GreenhouseFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public void populateGreenhouseInfo(String temp, String hum, String moisture, String light){
-        this.temperature.setText(temp);
-        this.humidity.setText(hum);
-        this.moisture.setText(moisture);
-        this.light.setText(light);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_greenhouse, container, false);
 
-        temperature = root.findViewById(R.id.temperatureTextView);
-        humidity = root.findViewById(R.id.humidityTextView);
-        moisture = root.findViewById(R.id.soilMoistureTextView);
-        light = root.findViewById(R.id.lightLevelTextView);
+        temperature = root.findViewById(R.id.temperatureValueTextView);
+        humidity = root.findViewById(R.id.humidityValueTextView);
+        moisture = root.findViewById(R.id.soilMoistureValueTextView);
+        light = root.findViewById(R.id.lightLevelValueTextView);
         buttonConnect = root.findViewById(R.id.buttonConnect);
         toolbar = root.findViewById(R.id.toolbar);
         textViewInfo = root.findViewById(R.id.textViewInfo);
@@ -86,7 +72,6 @@ public class GreenhouseFragment extends Fragment {
             if (device_name != null) {
                 device_address = bundle.getString("device_address");
                 toolbar.setSubtitle("Connecting to " + device_name + "...");
-                progressBar.setVisibility(View.VISIBLE);
                 buttonConnect.setEnabled(false);
                 /*
                 This is the most important piece of code. When "deviceName" is found
@@ -94,7 +79,7 @@ public class GreenhouseFragment extends Fragment {
                 selected device (see the thread code below)
                  */
                 BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                createConnectThread = new BluetoothFragment.CreateConnectThread(bluetoothAdapter, device_address);
+                createConnectThread = new GreenhouseFragment.CreateConnectThread(bluetoothAdapter, device_address);
                 createConnectThread.start();
             }
         }
@@ -107,12 +92,10 @@ public class GreenhouseFragment extends Fragment {
                         switch(msg.arg1){
                             case 1:
                                 toolbar.setSubtitle("Connected to " + device_name);
-                                progressBar.setVisibility(View.GONE);
                                 buttonConnect.setEnabled(true);
                                 break;
                             case -1:
                                 toolbar.setSubtitle("Device fails to connect");
-                                progressBar.setVisibility(View.GONE);
                                 buttonConnect.setEnabled(true);
                                 break;
                         }
@@ -120,7 +103,42 @@ public class GreenhouseFragment extends Fragment {
 
                     case MESSAGE_READ:
                         String arduinoMsg = msg.obj.toString(); // Read message from Arduino
-                        textViewInfo.setText("Arduino Message : " + arduinoMsg);
+                        String[] tokens = arduinoMsg.split("/");
+
+                        if(tokens.length == 8) {
+                            for (int i = 0; i < tokens.length; i++){
+                                String temp = tokens[i];
+                                String value = "";
+                                switch (temp){
+                                    case "Temperature":
+                                        i++;
+                                        value = tokens[i];
+                                        temperature.setText(value + "\u2103");
+                                        break;
+
+                                    case "Humidity":
+                                        i++;
+                                        value = tokens[i];
+                                        humidity.setText(value + "%");
+                                        break;
+
+                                    case "Light":
+                                        i++;
+                                        value = tokens[i];
+                                        light.setText(value);
+                                        break;
+
+                                    case "Soil":
+                                        i++;
+                                        value = tokens[i];
+                                        moisture.setText(value + "%");
+                                        break;
+
+                                    default:
+
+                                }
+                            }
+                        }
                     break;
                 }
             }
@@ -132,7 +150,7 @@ public class GreenhouseFragment extends Fragment {
             public void onClick(View view) {
                 // Move to adapter list
                 NavController navController = NavHostFragment.findNavController(GreenhouseFragment.this);
-                navController.navigate(R.id.nav_device_selection);
+                navController.navigate(R.id.nav_device_selection_view);
             }
         });
 
@@ -196,7 +214,7 @@ public class GreenhouseFragment extends Fragment {
 
             // The connection attempt succeeded. Perform work associated with
             // the connection in a separate thread.
-            connectedThread = new BluetoothFragment.ConnectedThread(mmSocket);
+            connectedThread = new GreenhouseFragment.ConnectedThread(mmSocket);
             connectedThread.run();
         }
 

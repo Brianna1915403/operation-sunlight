@@ -53,6 +53,8 @@
         android:label="@string/menu_bluetooth"
         tools:layout="@layout/fragment_bluetooth" />
 
+
+
     <fragment
         android:id="@+id/nav_device_selection"
         android:name="com.example.operationsunlight.modules.bluetooth.DeviceSelectionFragment"
@@ -64,4 +66,10 @@
         android:name="com.example.operationsunlight.SettingsFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/nav_device_selection_view"
+        android:name="com.example.operationsunlight.modules.bluetooth.DeviceSelectionFragmentView"
+        android:label="@string/menu_device_selection_view"
+        tools:layout="@layout/fragment_device_selection_view" />
 </navigation>
