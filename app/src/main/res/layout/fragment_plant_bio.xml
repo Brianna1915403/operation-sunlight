@@ -6,16 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".modules.plant.PlantBioFragment">
 
-    <TextView
-        android:id="@+id/plant_bio_trefle_disclaimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="@string/trefle_disclaimer"
-        android:textColorLink="?attr/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+<!--    <TextView-->
+<!--        android:id="@+id/plant_bio_trefle_disclaimer"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="5dp"-->
+<!--        android:text="@string/trefle_disclaimer"-->
+<!--        android:textColorLink="?attr/colorAccent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/plant_menu_fab"

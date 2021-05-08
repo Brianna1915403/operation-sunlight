@@ -43,7 +43,7 @@ public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdap
                 .error(R.drawable.error_file)
                 .into(holder.image);
         
-        holder.plant_id = plant.plant_id;
+        holder.plant_id = plant .plant_id;
         holder.common_name.setText(plant.common_name);
         holder.scientific_name.setText(plant.scientific_name);
         holder.family_common_name.setText(plant.family_common_name);
@@ -55,7 +55,8 @@ public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdap
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private int plant_id;
+//        private int plant_id;
+        private long plant_id;
         CircleImageView image;
         TextView common_name, scientific_name, family_common_name;
         LinearLayout parentLayout;

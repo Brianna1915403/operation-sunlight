@@ -1,13 +1,16 @@
 package com.example.operationsunlight.modules.plant;
 
 public class Plant {
-    int plant_id;
+//    int plant_id;
+    long plant_id;
     String common_name;
     String scientific_name;
     String family_common_name;
     String image_url;
 
-    public Plant(int plant_id, String common_name, String scientific_name, String family_common_name, String image_url){
+    public Plant() {    }
+
+    public Plant(long plant_id, String common_name, String scientific_name, String family_common_name, String image_url){
         this.plant_id = plant_id;
         this.common_name = common_name.equals("null")? "Unknown" : common_name;
         this.scientific_name = scientific_name.equals("null")? "Unknown" : scientific_name;

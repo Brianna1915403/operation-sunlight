@@ -26,17 +26,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.ExecutionException;
-
+//TODO: Read from DB
 public class PlantBioFragment extends Fragment {
     private static final String TAG = "ARGS" ; // Can be removed only for debug purposes
     private View root;
     private PlantBio plantBio;
     private Plant plant;
-    private int plant_id;
+    private long plant_id;
 
-    private static String url = "https://trefle.io/api/v1/plants/";
-    private final static String token = "?token=dZWkjKZTg7acXlHla7dapXq4-cAgxA4nU1eqHCA763M";
-    private String final_request;
+//    private static String url = "https://trefle.io/api/v1/plants/";
+//    private final static String token = "?token=dZWkjKZTg7acXlHla7dapXq4-cAgxA4nU1eqHCA763M";
+//    private String final_request;
 
     private ImageView plantImage;
     private TextView commonName, scientificName, familyCommonName,
@@ -53,7 +53,7 @@ public class PlantBioFragment extends Fragment {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_plant_bio, container, false);
         Bundle bundle = getArguments();
-        plant_id = bundle.getInt("plant_id");
+        plant_id = bundle.getLong("plant_id");
         plantImage = root.findViewById(R.id.plantImage);
         commonName = root.findViewById(R.id.commonNameTextView);
         scientificName = root.findViewById(R.id.scientificNameTextView);
@@ -99,20 +99,20 @@ public class PlantBioFragment extends Fragment {
                 plant_fab_label.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
             }
         });
-        TextView trefle_disclaimer = root.findViewById(R.id.plant_bio_trefle_disclaimer);
-        trefle_disclaimer.setMovementMethod(LinkMovementMethod.getInstance());
+//        TextView trefle_disclaimer = root.findViewById(R.id.plant_bio_trefle_disclaimer);
+//        trefle_disclaimer.setMovementMethod(LinkMovementMethod.getInstance());
         return root;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final_request = url + plant_id + token;
-        try {
-            new GetPlantInfo().execute().get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+//        final_request = url + plant_id + token;
+//        try {
+//            new GetPlantInfo().execute().get();
+//        } catch (ExecutionException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         Picasso.get()
                 .load(plantBio.getImage_url())
@@ -133,70 +133,70 @@ public class PlantBioFragment extends Fragment {
         temperature_min_max.setText("Temperature Range: " + plantBio.getMin_temperature() + " \u2103" + " to " + plantBio.getMax_temperature() + " \u2103");
     }
 
-    private class GetPlantInfo extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(root.getContext());
-            progressDialog.setMessage("Loading...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            HTTPHandler handler = new HTTPHandler();
-            String jsonStr = handler.makeServiceCall(final_request);
-            if (jsonStr != null) {
-                try {
-                    JSONObject jsonObject = new JSONObject(jsonStr);
-                    JSONObject jsonPlant = jsonObject.getJSONObject("data");
-
-                    plant = new Plant(
-                            plant_id,
-                            jsonPlant.getString("common_name"),
-                            jsonPlant.getString("scientific_name"),
-                            jsonPlant.getString("family_common_name"),
-                            jsonPlant.getString("image_url"));
-
-                    JSONObject main_species = jsonPlant.getJSONObject("main_species");
-                    JSONObject growth = main_species.getJSONObject("growth");
-
-                    JSONObject row_spacing = growth.getJSONObject("row_spacing");
-                    JSONObject spread = growth.getJSONObject("spread");
-
-                    JSONObject minimum_precipitation = growth.getJSONObject("minimum_precipitation");
-                    JSONObject maximum_precipitation = growth.getJSONObject("maximum_precipitation");
-                    JSONObject minimum_root_depth = growth.getJSONObject("minimum_root_depth");
-                    JSONObject minimum_temperature = growth.getJSONObject("minimum_temperature");
-                    JSONObject maximum_temperature = growth.getJSONObject("maximum_temperature");
-
-                    plantBio = new PlantBio(
-                            plant,
-                            jsonPlant.getString("vegetable"),
-                            growth.getString("days_to_harvest"),
-                            row_spacing.getString("cm"),
-                            spread.getString("cm"),
-                            growth.getString("ph_minimum"),
-                            growth.getString("ph_maximum"),
-                            growth.getString("light"),
-                            minimum_precipitation.getString("mm"),
-                            maximum_precipitation.getString("mm"),
-                            minimum_root_depth.getString("cm"),
-                            minimum_temperature.getString("deg_c"),
-                            maximum_temperature.getString("deg_c"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            progressDialog.dismiss();
-        }
-    }
+//    private class GetPlantInfo extends AsyncTask<Void, Void, Void> {
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            progressDialog = new ProgressDialog(root.getContext());
+//            progressDialog.setMessage("Loading...");
+//            progressDialog.setCancelable(false);
+//            progressDialog.show();
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            HTTPHandler handler = new HTTPHandler();
+//            String jsonStr = handler.makeServiceCall(final_request);
+//            if (jsonStr != null) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(jsonStr);
+//                    JSONObject jsonPlant = jsonObject.getJSONObject("data");
+//
+//                    plant = new Plant(
+//                            plant_id,
+//                            jsonPlant.getString("common_name"),
+//                            jsonPlant.getString("scientific_name"),
+//                            jsonPlant.getString("family_common_name"),
+//                            jsonPlant.getString("image_url"));
+//
+//                    JSONObject main_species = jsonPlant.getJSONObject("main_species");
+//                    JSONObject growth = main_species.getJSONObject("growth");
+//
+//                    JSONObject row_spacing = growth.getJSONObject("row_spacing");
+//                    JSONObject spread = growth.getJSONObject("spread");
+//
+//                    JSONObject minimum_precipitation = growth.getJSONObject("minimum_precipitation");
+//                    JSONObject maximum_precipitation = growth.getJSONObject("maximum_precipitation");
+//                    JSONObject minimum_root_depth = growth.getJSONObject("minimum_root_depth");
+//                    JSONObject minimum_temperature = growth.getJSONObject("minimum_temperature");
+//                    JSONObject maximum_temperature = growth.getJSONObject("maximum_temperature");
+//
+//                    plantBio = new PlantBio(
+//                            plant,
+//                            jsonPlant.getString("vegetable"),
+//                            growth.getString("days_to_harvest"),
+//                            row_spacing.getString("cm"),
+//                            spread.getString("cm"),
+//                            growth.getString("ph_minimum"),
+//                            growth.getString("ph_maximum"),
+//                            growth.getString("light"),
+//                            minimum_precipitation.getString("mm"),
+//                            maximum_precipitation.getString("mm"),
+//                            minimum_root_depth.getString("cm"),
+//                            minimum_temperature.getString("deg_c"),
+//                            maximum_temperature.getString("deg_c"));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//            progressDialog.dismiss();
+//        }
+//    }
 }
