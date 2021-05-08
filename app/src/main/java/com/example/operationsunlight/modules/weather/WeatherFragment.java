@@ -66,8 +66,8 @@ public class WeatherFragment extends Fragment {
     private static String url = "https://api.openweathermap.org/data/2.5/onecall?units=metric&exclude=minutely";
     private final static String apiKey = "&appid=b5aef5f8fe1f3f70de5080d2b9b58e9f";
     // Currently set to MTL lat/long by default.
-    private String lat = "&lat=45.5017";
-    private String lon = "&lon=-73.5673";
+    private String lat = "";
+    private String lon = "";
 
     private String final_request = "";
 
@@ -108,15 +108,15 @@ public class WeatherFragment extends Fragment {
         dailyRecycler = root.findViewById(R.id.dailyRecycler);
         hourlyRecycler = root.findViewById(R.id.hourlyRecycler);
 
-        final_request = url + apiKey + lat + lon;
+//        final_request = url + apiKey + lat + lon;
 
-        try {
-            new GetWeather().execute().get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            new GetWeather().execute().get();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         image = root.findViewById(R.id.image);
 
@@ -142,29 +142,29 @@ public class WeatherFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()) || preferences.getString("USERNAME", null) == null)
             return;
-        SimpleDateFormat currentDateFormat = new SimpleDateFormat("E MMM d HH:mm a");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-
-        Glide.with(root.getContext())
-                .asBitmap()
-                .load(WeatherIcon.getWeatherIcon(currentWeather.getIcon()))
-                .placeholder(R.drawable.loading_icon)
-                .error(R.drawable.error_file)
-                .into(image);
-
-        dateTime.setText("" + currentDateFormat.format(new Date((long) currentWeather.getDatetime() * 1000)));
-        temperature.setText((int) Math.round(currentWeather.getTemp()) + "\u2103");
-        feels.setText("Feels Like: " + (int) Math.round(currentWeather.getFeels()) + "\u2103");
-        main.setText(currentWeather.getMain());
-        description.setText("Specification: " + currentWeather.getDesc());
-        humidity.setText("Humidity: " + currentWeather.getHumidity() + "%");
-        uvi.setText("uvIndex: " + currentWeather.getUvi());
-        clouds.setText("Clouds: " + currentWeather.getClouds() + "%");
-        sunrise.setText("Sunrise: " + timeFormat.format(new Date((long) currentWeather.getSunrise() * 1000)));
-        sunset.setText("Sunset: " + timeFormat.format(new Date((long) currentWeather.getSunset() * 1000)));
-        windSpeed.setText("Wind Speed: " + currentWeather.getWind_speed() + "m/s");
-        windDegree.setText("Wind Degree: " + currentWeather.getWind_deg() + "\u00B0");
-        rain.setText("Rain (Past Hour): " + currentWeather.getRain() + "mm");
+//        SimpleDateFormat currentDateFormat = new SimpleDateFormat("E MMM d HH:mm a");
+//        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+//
+//        Glide.with(root.getContext())
+//                .asBitmap()
+//                .load(WeatherIcon.getWeatherIcon(currentWeather.getIcon()))
+//                .placeholder(R.drawable.loading_icon)
+//                .error(R.drawable.error_file)
+//                .into(image);
+//
+//        dateTime.setText("" + currentDateFormat.format(new Date((long) currentWeather.getDatetime() * 1000)));
+//        temperature.setText((int) Math.round(currentWeather.getTemp()) + "\u2103");
+//        feels.setText("Feels Like: " + (int) Math.round(currentWeather.getFeels()) + "\u2103");
+//        main.setText(currentWeather.getMain());
+//        description.setText("Specification: " + currentWeather.getDesc());
+//        humidity.setText("Humidity: " + currentWeather.getHumidity() + "%");
+//        uvi.setText("uvIndex: " + currentWeather.getUvi());
+//        clouds.setText("Clouds: " + currentWeather.getClouds() + "%");
+//        sunrise.setText("Sunrise: " + timeFormat.format(new Date((long) currentWeather.getSunrise() * 1000)));
+//        sunset.setText("Sunset: " + timeFormat.format(new Date((long) currentWeather.getSunset() * 1000)));
+//        windSpeed.setText("Wind Speed: " + currentWeather.getWind_speed() + "m/s");
+//        windDegree.setText("Wind Degree: " + currentWeather.getWind_deg() + "\u00B0");
+//        rain.setText("Rain (Past Hour): " + currentWeather.getRain() + "mm");
     }
 
     @Override
@@ -189,7 +189,43 @@ public class WeatherFragment extends Fragment {
                 if(location != null) {
                     lat = "&lat=" + location.getLatitude();
                     lon = "&lon=" + location.getLongitude();
-                    System.out.println(lat + " " + lon);
+                    System.out.println("Current lat/lon: " + lat + " " + lon);
+
+                    final_request = url + apiKey + lat + lon;
+                    System.out.println(final_request);
+                    try {
+                        new GetWeather().execute().get();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    SimpleDateFormat currentDateFormat = new SimpleDateFormat("E MMM d HH:mm a");
+                    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+
+                    Glide.with(root.getContext())
+                            .asBitmap()
+                            .load(WeatherIcon.getWeatherIcon(currentWeather.getIcon()))
+                            .placeholder(R.drawable.loading_icon)
+                            .error(R.drawable.error_file)
+                            .into(image);
+
+                    dateTime.setText("" + currentDateFormat.format(new Date((long) currentWeather.getDatetime() * 1000)));
+                    temperature.setText((int) Math.round(currentWeather.getTemp()) + "\u2103");
+                    feels.setText("Feels Like: " + (int) Math.round(currentWeather.getFeels()) + "\u2103");
+                    main.setText(currentWeather.getMain());
+                    description.setText("Specification: " + currentWeather.getDesc());
+                    humidity.setText("Humidity: " + currentWeather.getHumidity() + "%");
+                    uvi.setText("uvIndex: " + currentWeather.getUvi());
+                    clouds.setText("Clouds: " + currentWeather.getClouds() + "%");
+                    sunrise.setText("Sunrise: " + timeFormat.format(new Date((long) currentWeather.getSunrise() * 1000)));
+                    sunset.setText("Sunset: " + timeFormat.format(new Date((long) currentWeather.getSunset() * 1000)));
+                    windSpeed.setText("Wind Speed: " + currentWeather.getWind_speed() + "m/s");
+                    windDegree.setText("Wind Degree: " + currentWeather.getWind_deg() + "\u00B0");
+                    rain.setText("Rain (Past Hour): " + currentWeather.getRain() + "mm");
+
+
                 }
             }
         });
