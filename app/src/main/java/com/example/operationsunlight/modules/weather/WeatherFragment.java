@@ -1,8 +1,11 @@
 package com.example.operationsunlight.modules.weather;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -10,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +23,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +33,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.operationsunlight.HTTPHandler;
 import com.example.operationsunlight.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +65,7 @@ public class WeatherFragment extends Fragment {
 
     private static String url = "https://api.openweathermap.org/data/2.5/onecall?units=metric&exclude=minutely";
     private final static String apiKey = "&appid=b5aef5f8fe1f3f70de5080d2b9b58e9f";
-    // Currently set to MTL lat/long until gps is working.
+    // Currently set to MTL lat/long by default.
     private String lat = "&lat=45.5017";
     private String lon = "&lon=-73.5673";
 
@@ -63,10 +74,13 @@ public class WeatherFragment extends Fragment {
     ImageView image;
 
     TextView dateTime, temperature, feels, main, description, humidity,
-    uvi, clouds, sunrise, sunset, windSpeed, windDegree, rain;
+            uvi, clouds, sunrise, sunset, windSpeed, windDegree, rain;
 
     protected LocationManager locationManager;
     protected LocationListener locationListener;
+    private static final String TAG = null;
+    private int LOCATION_REQUEST_CODE = 10001;
+    FusedLocationProviderClient fusedLocationProviderClient;
 
     public Weather currentWeather;
     public FutureWeather futureWeather;
@@ -78,6 +92,9 @@ public class WeatherFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getActivity());
+
         root = inflater.inflate(R.layout.fragment_no_connection, container, false);
         preferences = getActivity().getSharedPreferences("ACCOUNT", MODE_PRIVATE);
         if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()))
@@ -90,20 +107,6 @@ public class WeatherFragment extends Fragment {
 
         dailyRecycler = root.findViewById(R.id.dailyRecycler);
         hourlyRecycler = root.findViewById(R.id.hourlyRecycler);
-
-//        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-//        if (ActivityCompat.checkSelfPermission(root.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//        }
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, root.getContext());
-        // Set to current lat/lon through gps later.
 
         final_request = url + apiKey + lat + lon;
 
@@ -149,7 +152,7 @@ public class WeatherFragment extends Fragment {
                 .error(R.drawable.error_file)
                 .into(image);
 
-        dateTime.setText("" + currentDateFormat.format(new Date((long)currentWeather.getDatetime()*1000)));
+        dateTime.setText("" + currentDateFormat.format(new Date((long) currentWeather.getDatetime() * 1000)));
         temperature.setText((int) Math.round(currentWeather.getTemp()) + "\u2103");
         feels.setText("Feels Like: " + (int) Math.round(currentWeather.getFeels()) + "\u2103");
         main.setText(currentWeather.getMain());
@@ -157,11 +160,69 @@ public class WeatherFragment extends Fragment {
         humidity.setText("Humidity: " + currentWeather.getHumidity() + "%");
         uvi.setText("uvIndex: " + currentWeather.getUvi());
         clouds.setText("Clouds: " + currentWeather.getClouds() + "%");
-        sunrise.setText("Sunrise: " + timeFormat.format(new Date((long)currentWeather.getSunrise()*1000)));
-        sunset.setText("Sunset: " + timeFormat.format(new Date((long)currentWeather.getSunset()*1000)));
+        sunrise.setText("Sunrise: " + timeFormat.format(new Date((long) currentWeather.getSunrise() * 1000)));
+        sunset.setText("Sunset: " + timeFormat.format(new Date((long) currentWeather.getSunset() * 1000)));
         windSpeed.setText("Wind Speed: " + currentWeather.getWind_speed() + "m/s");
         windDegree.setText("Wind Degree: " + currentWeather.getWind_deg() + "\u00B0");
         rain.setText("Rain (Past Hour): " + currentWeather.getRain() + "mm");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (ContextCompat.checkSelfPermission(root.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getLastLocation();
+        } else {
+            askLocationPermission();
+        }
+    }
+
+    private void getLastLocation() {
+        if (ActivityCompat.checkSelfPermission(root.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(root.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+
+        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location != null) {
+                    lat = "&lat=" + location.getLatitude();
+                    lon = "&lon=" + location.getLongitude();
+                    System.out.println(lat + " " + lon);
+                }
+            }
+        });
+
+        locationTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "onFailure: " + e.getLocalizedMessage());
+            }
+        });
+    }
+
+    private void askLocationPermission(){
+        if(ContextCompat.checkSelfPermission(root.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)){
+                Log.d(TAG, "askLocationPermission: you should show an alert dialog...");
+                ActivityCompat.requestPermissions(this.getActivity(), new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+            } else {
+                ActivityCompat.requestPermissions(this.getActivity(), new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == LOCATION_REQUEST_CODE){
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                // Permission granted
+                getLastLocation();
+            } else {
+                // Permission not granted
+            }
+        }
     }
 
     private class GetWeather extends AsyncTask<Void, Void, Void> {
