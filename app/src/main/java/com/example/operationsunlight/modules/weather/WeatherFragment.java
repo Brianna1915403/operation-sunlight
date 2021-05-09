@@ -339,7 +339,7 @@ public class WeatherFragment extends Fragment {
                         futureWeather = new FutureWeather(
                                     hourFormat.format(new Date((long)hour.getInt("dt")*1000)),
                                 (int) Math.round(hour.getDouble("temp")) + "\u2103",
-                                "pop: " + hour.getInt("pop") + "%",
+                                "pop: " + (int) (hour.getDouble("pop") * 100) + "%",
                                  hour.getJSONArray("weather").getJSONObject(0).getString("icon")
                         );
                         hourly.add(futureWeather);
@@ -352,7 +352,7 @@ public class WeatherFragment extends Fragment {
                         futureWeather = new FutureWeather(
                                     dayFormat.format(new Date((long)day.getInt("dt")*1000)),
                                 (int) Math.round(day.getJSONObject("temp").getDouble("day")) + "\u2103",
-                                    "pop: " + day.getInt("pop") + "%",
+                                    "pop: " + (int) (day.getDouble("pop") * 100) + "%",
                                 day.getJSONArray("weather").getJSONObject(0).getString("icon")
                         );
                         daily.add(futureWeather);
