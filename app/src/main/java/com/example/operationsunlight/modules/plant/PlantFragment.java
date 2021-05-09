@@ -74,7 +74,7 @@ public class PlantFragment extends Fragment implements OnPlantListener {
             return root;
         else
             root = inflater.inflate(R.layout.fragment_plant, container, false);
-        reference = FirebaseDatabase.getInstance().getReference().child("PLANT");
+        reference = FirebaseDatabase.getInstance().getReference().child("NOTE");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
