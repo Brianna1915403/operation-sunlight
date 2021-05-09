@@ -74,7 +74,7 @@ public class PlantFragment extends Fragment implements OnPlantListener {
             return root;
         else
             root = inflater.inflate(R.layout.fragment_plant, container, false);
-        reference = FirebaseDatabase.getInstance().getReference().child("NOTE");
+        reference = FirebaseDatabase.getInstance().getReference().child("PLANT");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -123,7 +123,7 @@ public class PlantFragment extends Fragment implements OnPlantListener {
 //                if(searchView.getQuery().toString().isEmpty()) {
 //                    final_request = "";
 //                    searchQuery = "";
-//                    updateRecycler();
+                    updateRecycler();
 //                }
                 Toast.makeText(root.getContext(), "Trefel has been discontinued, hence we cannot preform this action", Toast.LENGTH_LONG).show();
                 return false;
@@ -135,7 +135,7 @@ public class PlantFragment extends Fragment implements OnPlantListener {
 //                searchQuery = query;
 //                currentPage = 1;
 //                final_request = url + search + searchQuery + pagination + currentPage + sort + (isAscendingOrder? "asc" : "desc");
-//                updateRecycler();
+                updateRecycler();
                 Toast.makeText(root.getContext(), "Trefel has been discontinued, hence we cannot preform this action", Toast.LENGTH_LONG).show();
                 return false;
             }
@@ -150,7 +150,7 @@ public class PlantFragment extends Fragment implements OnPlantListener {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 //                isAscendingOrder = !isChecked;
 //                final_request = final_request.substring(0, final_request.lastIndexOf('=') + 1).concat(isAscendingOrder? "asc" : "desc");
-//                updateRecycler();
+                updateRecycler();
                 Toast.makeText(root.getContext(), "Trefel has been discontinued, hence we cannot preform this action", Toast.LENGTH_LONG).show();
             }
         });
@@ -162,7 +162,7 @@ public class PlantFragment extends Fragment implements OnPlantListener {
 //                if(currentPage < max_pages) {
 //                    currentPage++;
 //                    final_request = url + (searchQuery.isEmpty() ? token : search + searchQuery) + pagination + currentPage + sort + (isAscendingOrder ? "asc" : "desc");
-//                    updateRecycler();
+                    updateRecycler();
 //                    updatePage();
 //                }
                 Toast.makeText(root.getContext(), "Trefel has been discontinued, hence we cannot preform this action", Toast.LENGTH_LONG).show();
@@ -176,7 +176,7 @@ public class PlantFragment extends Fragment implements OnPlantListener {
 //                if(currentPage > 1) {
 //                    currentPage--;
 //                    final_request = url + (searchQuery.isEmpty() ? token : search + searchQuery) + pagination + currentPage + sort + (isAscendingOrder ? "asc" : "desc");
-//                    updateRecycler();
+                    updateRecycler();
 //                    updatePage();
 //                }
                 Toast.makeText(root.getContext(), "Trefel has been discontinued, hence we cannot preform this action", Toast.LENGTH_LONG);
@@ -194,7 +194,7 @@ public class PlantFragment extends Fragment implements OnPlantListener {
         super.onViewCreated(view, savedInstanceState);
         if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()))
             return;
-//        updateRecycler();
+        updateRecycler();
     }
 
     @Override
@@ -225,7 +225,7 @@ public class PlantFragment extends Fragment implements OnPlantListener {
 //        try {
 //            if (final_request.isEmpty())
 //                final_request = url + token + pagination + currentPage + sort + (isAscendingOrder ? "asc" : "desc");
-//            clearRecycler();
+            clearRecycler();
 //            new GetPlants().execute().get();
 //            System.out.println("updateRecycler:: " + final_request);
 //            updatePage();

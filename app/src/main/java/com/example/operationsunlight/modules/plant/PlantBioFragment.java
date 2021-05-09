@@ -1,14 +1,8 @@
 package com.example.operationsunlight.modules.plant;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,27 +10,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.example.operationsunlight.HTTPHandler;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.operationsunlight.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
 
-import java.util.concurrent.ExecutionException;
-//TODO: Read from DB
 public class PlantBioFragment extends Fragment {
-    private static final String TAG = "ARGS" ; // Can be removed only for debug purposes
-    private View root;
-    private PlantBio plantBio;
-    private Plant plant;
-    private long plant_id;
-
-//    private static String url = "https://trefle.io/api/v1/plants/";
-//    private final static String token = "?token=dZWkjKZTg7acXlHla7dapXq4-cAgxA4nU1eqHCA763M";
-//    private String final_request;
+    View root;
+    SharedPreferences preferences;
+    DatabaseReference plantRef;
 
     private ImageView plantImage;
     private TextView commonName, scientificName, familyCommonName,
@@ -45,13 +38,21 @@ public class PlantBioFragment extends Fragment {
             temperature_min_max, plant_fab_label, note_fab_label;
     private FloatingActionButton menu_fab, plant_fab, note_fab;
     private boolean isFabVisible = false;
-
-    private ProgressDialog progressDialog;
+    private long plant_id;
+    Plant plant;
+    PlantBio plantBio;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_plant_bio, container, false);
+        preferences = getActivity().getSharedPreferences("ACCOUNT", Context.MODE_PRIVATE);
+
         Bundle bundle = getArguments();
         plant_id = bundle.getLong("plant_id");
         plantImage = root.findViewById(R.id.plantImage);
@@ -61,12 +62,15 @@ public class PlantBioFragment extends Fragment {
         isVegetable = root.findViewById(R.id.isVegetableTextView);
         daysToHarvest = root.findViewById(R.id.days_To_HarvestTextView);
         rowSpacing = root.findViewById(R.id.row_spacingTextView);
-        spread = root.findViewById(R.id.spreadTextView);
         ph_min_max = root.findViewById(R.id.ph_min_max_TextView);
         light = root.findViewById(R.id.lightTextView);
         precipitation_min_max = root.findViewById(R.id.precipitation_min_maxTextView);
         min_root_depth = root.findViewById(R.id.min_root_depthTextView);
         temperature_min_max = root.findViewById(R.id.temperature_min_max_TextView);
+        note_fab_label = root.findViewById(R.id.plant_note_fab_label);
+        note_fab = root.findViewById(R.id.plant_note_fab);
+        note_fab.setVisibility(View.GONE);
+        note_fab_label.setVisibility(View.GONE);
         note_fab_label = root.findViewById(R.id.plant_note_fab_label);
         note_fab = root.findViewById(R.id.plant_note_fab);
         note_fab.setVisibility(View.GONE);
@@ -99,104 +103,58 @@ public class PlantBioFragment extends Fragment {
                 plant_fab_label.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
             }
         });
-//        TextView trefle_disclaimer = root.findViewById(R.id.plant_bio_trefle_disclaimer);
-//        trefle_disclaimer.setMovementMethod(LinkMovementMethod.getInstance());
+        plantRef = FirebaseDatabase.getInstance().getReference().child("PLANT").child(plant_id + "");
+
+        plantRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                String common_name = (String) snapshot.child("common_name").getValue();
+                String scientific_name = (String) snapshot.child("scientific_name").getValue();
+                String family_common_name = (String) snapshot.child("family_common_name").getValue();
+                String image_url = (String) snapshot.child("image_url").getValue();
+                String is_Vegetable = snapshot.child("isVegetable").getValue().toString();
+                String days_To_Harvest = (String) snapshot.child("daysToHarvest").getValue();
+                String row_Spacing = (String) snapshot.child("rowSpacing").getValue();
+                String min_ph = snapshot.child("min_pH").getValue().toString();
+                String max_ph = snapshot.child("max_pH").getValue().toString();
+                String light_level = (String) snapshot.child("light").getValue();
+                String min_precipitation = (String) snapshot.child("min_precipitation").getValue();
+                String max_precipitation = (String) snapshot.child("max_precipitation").getValue();
+                String min_Root_Depth = (String) snapshot.child("min_root_depth").getValue();
+                String min_temperature = snapshot.child("min_temp").getValue().toString();
+                String max_temperature = snapshot.child("max_temp").getValue().toString();
+
+                plant = new Plant(plant_id, common_name, scientific_name, family_common_name, image_url);
+                plantBio = new PlantBio(plant, is_Vegetable, days_To_Harvest, row_Spacing, min_ph, max_ph,
+                        light_level, min_precipitation, max_precipitation,
+                        min_Root_Depth, min_temperature, max_temperature);
+
+                Picasso.get()
+                        .load(plantBio.getImage_url())
+                        .placeholder(R.drawable.error_file)
+                        .error(R.drawable.error_file)
+                        .into(plantImage);
+
+                commonName.setText(plantBio.getCommon_name());
+                scientificName.setText("Scientific Name: " + plantBio.getScientific_name());
+                familyCommonName.setText("Family Common Name: " + plantBio.getFamily_common_name());
+                isVegetable.setText("Is vegetable: " + plantBio.isVegetable());
+                daysToHarvest.setText("Days to Harvest: " + plantBio.getDaysToHarvest() + " days");
+                rowSpacing.setText("Row Spacing: " + plantBio.getRowSpacing() + " cm");
+                ph_min_max.setText("Ph Range: " + plantBio.getMin_ph() + " to " + plantBio.getMax_ph());
+                light.setText("Light: " + plantBio.getLight());
+                precipitation_min_max.setText("Precipitation Range: " + plantBio.getMin_precipitation() + " mm" + " to " + plantBio.getMax_precipitation() + " mm");
+                min_root_depth.setText("Minimum Root Depth: " + plantBio.getMin_root_depth() + " cm");
+                temperature_min_max.setText("Temperature Range: " + plantBio.getMin_temperature() + " \u2103" + " to " + plantBio.getMax_temperature() + " \u2103");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         return root;
     }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-//        final_request = url + plant_id + token;
-//        try {
-//            new GetPlantInfo().execute().get();
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
-        Picasso.get()
-                .load(plantBio.getImage_url())
-                .placeholder(R.drawable.error_file)
-                .error(R.drawable.error_file)
-                .into(plantImage);
-        commonName.setText(plantBio.getCommon_name());
-        scientificName.setText("Scientific Name: " + plantBio.getScientific_name());
-        familyCommonName.setText("Family Common Name: " + plantBio.getFamily_common_name());
-        isVegetable.setText("Is vegetable: " + plantBio.isVegetable());
-        daysToHarvest.setText("Days to Harvest: " + plantBio.getDaysToHarvest() + " days");
-        rowSpacing.setText("Row Spacing: " + plantBio.getRowSpacing() + " cm");
-        spread.setText("Spread: " + plantBio.getSpread() + " cm");
-        ph_min_max.setText("Ph Range: " + plantBio.getMin_ph() + " to " + plantBio.getMax_ph());
-        light.setText("Light: " + plantBio.getLight());
-        precipitation_min_max.setText("Precipitation Range: " + plantBio.getMin_precipitation() + " mm" + " to " + plantBio.getMax_precipitation() + " mm");
-        min_root_depth.setText("Minimum Root Depth: " + plantBio.getMin_root_depth() + " cm");
-        temperature_min_max.setText("Temperature Range: " + plantBio.getMin_temperature() + " \u2103" + " to " + plantBio.getMax_temperature() + " \u2103");
-    }
-
-//    private class GetPlantInfo extends AsyncTask<Void, Void, Void> {
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            progressDialog = new ProgressDialog(root.getContext());
-//            progressDialog.setMessage("Loading...");
-//            progressDialog.setCancelable(false);
-//            progressDialog.show();
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//            HTTPHandler handler = new HTTPHandler();
-//            String jsonStr = handler.makeServiceCall(final_request);
-//            if (jsonStr != null) {
-//                try {
-//                    JSONObject jsonObject = new JSONObject(jsonStr);
-//                    JSONObject jsonPlant = jsonObject.getJSONObject("data");
-//
-//                    plant = new Plant(
-//                            plant_id,
-//                            jsonPlant.getString("common_name"),
-//                            jsonPlant.getString("scientific_name"),
-//                            jsonPlant.getString("family_common_name"),
-//                            jsonPlant.getString("image_url"));
-//
-//                    JSONObject main_species = jsonPlant.getJSONObject("main_species");
-//                    JSONObject growth = main_species.getJSONObject("growth");
-//
-//                    JSONObject row_spacing = growth.getJSONObject("row_spacing");
-//                    JSONObject spread = growth.getJSONObject("spread");
-//
-//                    JSONObject minimum_precipitation = growth.getJSONObject("minimum_precipitation");
-//                    JSONObject maximum_precipitation = growth.getJSONObject("maximum_precipitation");
-//                    JSONObject minimum_root_depth = growth.getJSONObject("minimum_root_depth");
-//                    JSONObject minimum_temperature = growth.getJSONObject("minimum_temperature");
-//                    JSONObject maximum_temperature = growth.getJSONObject("maximum_temperature");
-//
-//                    plantBio = new PlantBio(
-//                            plant,
-//                            jsonPlant.getString("vegetable"),
-//                            growth.getString("days_to_harvest"),
-//                            row_spacing.getString("cm"),
-//                            spread.getString("cm"),
-//                            growth.getString("ph_minimum"),
-//                            growth.getString("ph_maximum"),
-//                            growth.getString("light"),
-//                            minimum_precipitation.getString("mm"),
-//                            maximum_precipitation.getString("mm"),
-//                            minimum_root_depth.getString("cm"),
-//                            minimum_temperature.getString("deg_c"),
-//                            maximum_temperature.getString("deg_c"));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Void aVoid) {
-//            super.onPostExecute(aVoid);
-//            progressDialog.dismiss();
-//        }
-//    }
 }

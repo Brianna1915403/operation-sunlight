@@ -227,21 +227,6 @@
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/spreadTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:text="Spread:" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1">
-
-            <TextView
                 android:id="@+id/ph_min_max_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"

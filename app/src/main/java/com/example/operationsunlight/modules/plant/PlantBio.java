@@ -4,7 +4,6 @@ public class PlantBio extends Plant{
     private String isVegetable;
     private String daysToHarvest;
     private String rowSpacing;
-    private String spread;
     private String min_ph;
     private String max_ph;
     private String light;
@@ -14,20 +13,19 @@ public class PlantBio extends Plant{
     private String min_temperature;
     private String max_temperature;
 
-    public PlantBio(Plant plant, String isVegetable, String daysToHarvest, String rowSpacing, String spread, String min_ph, String max_ph, String light, String min_precipitation, String max_precipitation, String min_root_depth, String min_temperature, String max_temperature) {
+    public PlantBio(Plant plant, String isVegetable, String daysToHarvest, String rowSpacing, String min_ph, String max_ph, String light, String min_precipitation, String max_precipitation, String min_root_depth, String min_temperature, String max_temperature) {
         super(plant);
-        this.isVegetable = isVegetable.equals("null")? "Unknown" : isVegetable.equalsIgnoreCase("true")? "Yes" : "No";
-        this.daysToHarvest = daysToHarvest.equals("null")? "Unknown" : daysToHarvest;
-        this.rowSpacing = rowSpacing.equals("null")? "Unknown" : rowSpacing;
-        this.spread = spread.equals("null")? "Unknown" : spread;
-        this.min_ph = min_ph.equals("null")? "Unknown" : min_ph;
-        this.max_ph = max_ph.equals("null")? "Unknown" : max_ph;
-        this.light = light.equals("null")? "Unknown" : light;
-        this.min_precipitation = min_precipitation.equals("null")? "Unknown" : min_precipitation;
-        this.max_precipitation = max_precipitation.equals("null")? "Unknown" : max_precipitation;
-        this.min_root_depth = min_root_depth.equals("null")? "Unknown" : min_root_depth;
-        this.min_temperature = min_temperature.equals("null")? "Unknown" : min_temperature;
-        this.max_temperature = max_temperature.equals("null")? "Unknown" : max_temperature;
+        this.isVegetable = isVegetable == null ? "Unknown" : isVegetable.equalsIgnoreCase("true")? "Yes" : "No";
+        this.daysToHarvest = daysToHarvest == null ? "Unknown" : daysToHarvest;
+        this.rowSpacing = rowSpacing == null ? "Unknown" : rowSpacing;
+        this.min_ph = min_ph == null ? "Unknown" : min_ph;
+        this.max_ph = max_ph == null ? "Unknown" : max_ph;
+        this.light = light == null ? "Unknown" : light;
+        this.min_precipitation = min_precipitation == null ? "Unknown" : min_precipitation;
+        this.max_precipitation = max_precipitation == null ? "Unknown" : max_precipitation;
+        this.min_root_depth = min_root_depth == null ? "Unknown" : min_root_depth;
+        this.min_temperature = min_temperature == null ? "Unknown" : min_temperature;
+        this.max_temperature = max_temperature == null ? "Unknown" : max_temperature;
     }
 
     @Override
@@ -36,7 +34,6 @@ public class PlantBio extends Plant{
                 ", isVegetable=" + isVegetable +
                 ", daysToHarvest=" + daysToHarvest +
                 ", rowSpacing='" + rowSpacing + '\'' +
-                ", spread='" + spread + '\'' +
                 ", min_ph=" + min_ph +
                 ", max_ph=" + max_ph +
                 ", light=" + light +
@@ -58,10 +55,6 @@ public class PlantBio extends Plant{
 
     public String getRowSpacing() {
         return rowSpacing;
-    }
-
-    public String getSpread() {
-        return spread;
     }
 
     public String getMin_ph() {
