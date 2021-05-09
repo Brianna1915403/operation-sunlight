@@ -16,12 +16,16 @@ float humidity = 0;
 
 int moisture = 0;
 
+String msg;
+
+const int ledPin = 13;
+
 void setup() {
   Serial.begin(9600);
   EEBlue.begin(9600);
   pinMode(13, OUTPUT);
-  pinMode(10, OUTPUT);
   dht.begin();
+  msg = "";
   //synchronizeClock(15, 34, 45, 21, 4, 2021);
 }
 
@@ -59,12 +63,6 @@ void printTempHum(){
 }
 
 void loop() {
-  
-  if (EEBlue.available()){
-      Serial.write(EEBlue.read());
-    
-  }
-      
       
   getTempHum();
   getLightLevel();
