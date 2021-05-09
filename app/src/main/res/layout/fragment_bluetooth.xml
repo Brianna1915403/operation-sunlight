@@ -59,7 +59,7 @@
             android:paddingRight="5dp">
 
             <Button
-                android:id="@+id/lightsButtonToggle"
+                android:id="@+id/wateringButtonToggle"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -68,13 +68,14 @@
                 android:textSize="24sp" />
 
             <Button
-                android:id="@+id/wateringButtonToggle"
+                android:id="@+id/lightsButtonToggle"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="10"
                 android:text="Turn On"
                 android:textSize="24sp" />
+
         </TableRow>
 
         <TableRow

@@ -79,8 +79,15 @@ void loop() {
       // Feed all data from termial to bluetooth
   if (Serial.available())
       EEBlue.write(Serial.read());
-  
+      
+  serialFlush();
   delay(5000);
   
 
+}
+
+void serialFlush(){
+  while(Serial.available() > 0) {
+    char t = Serial.read();
+  }
 }

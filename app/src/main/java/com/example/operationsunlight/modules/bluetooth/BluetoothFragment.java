@@ -130,20 +130,22 @@ public class BluetoothFragment extends Fragment {
             public void onClick(View view) {
                 String cmdText = null;
                 String btnState = buttonToggle.getText().toString().toLowerCase();
-                switch (btnState){
-                    case "turn on":
-                        buttonToggle.setText("Turn Off");
-                        // Command to turn on LED on Arduino. Must match with the command in Arduino code
-                        cmdText = "<turn on>";
-                        break;
-                    case "turn off":
-                        buttonToggle.setText("Turn On");
-                        // Command to turn off LED on Arduino. Must match with the command in Arduino code
-                        cmdText = "<turn off>";
-                        break;
-                }
+                connectedThread.write("a");
+                System.out.println("Sent command 'a'");
+//                switch (btnState){
+//                    case "turn on":
+//                        buttonToggle.setText("Turn Off");
+//                        // Command to turn on LED on Arduino. Must match with the command in Arduino code
+//                        cmdText = "a";
+//                        break;
+//                    case "turn off":
+//                        buttonToggle.setText("Turn On");
+//                        // Command to turn off LED on Arduino. Must match with the command in Arduino code
+//                        cmdText = "a";
+//                        break;
+                //}
                 // Send command to Arduino board
-                connectedThread.write(cmdText);
+                //connectedThread.write(cmdText);
             }
         });
         return root;
