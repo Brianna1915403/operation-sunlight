@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.operationsunlight.R;
@@ -46,6 +47,12 @@ public class GreenhouseFragment extends Fragment {
     private Button buttonConnect;
     private Toolbar toolbar;
     private TextView textViewInfo;
+    private ProgressBar pTemp, pHum, pMoist, pLight;
+
+    private double capTemperature = 50.00;
+    private double capHumidity = 100.00;
+    private int capMoisture = 100;
+    private int capLight = 1100;
 
 
 
@@ -65,6 +72,12 @@ public class GreenhouseFragment extends Fragment {
         buttonConnect = root.findViewById(R.id.buttonConnect);
         toolbar = root.findViewById(R.id.toolbar);
         textViewInfo = root.findViewById(R.id.textViewInfo);
+        pTemp = root.findViewById(R.id.progress_bar_temperature);
+        pHum = root.findViewById(R.id.progress_bar_humidity);
+        pMoist = root.findViewById(R.id.progress_bar_moisture);
+        pLight = root.findViewById(R.id.progress_bar_light);
+
+
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -109,29 +122,60 @@ public class GreenhouseFragment extends Fragment {
                             for (int i = 0; i < tokens.length; i++){
                                 String temp = tokens[i];
                                 String value = "";
+                                int tempInt = 0;
+                                double tempDouble = 0.00;
                                 switch (temp){
                                     case "Temperature":
                                         i++;
                                         value = tokens[i];
+                                        try{
+                                            tempDouble = Double.parseDouble(value);
+                                        }catch (NumberFormatException e){
+                                            tempDouble = 0;
+                                            System.err.print("Not a Number: " + e);
+                                        }
                                         temperature.setText(value + "\u2103");
+                                        pTemp.setProgress(calculatePercentageDouble(tempDouble, capTemperature));
                                         break;
 
                                     case "Humidity":
                                         i++;
                                         value = tokens[i];
+                                        try{
+                                            tempDouble = Double.parseDouble(value);
+                                        }catch (NumberFormatException e){
+                                            tempDouble = 0;
+                                            System.err.print("Not a Number: " + e);
+                                        }
                                         humidity.setText(value + "%");
+                                        pHum.setProgress(calculatePercentageDouble(tempDouble, capHumidity));
                                         break;
 
                                     case "Light":
                                         i++;
                                         value = tokens[i];
+                                        try{
+                                            tempInt = Integer.parseInt(value);
+                                        }catch (NumberFormatException e){
+                                            tempInt = 0;
+                                            System.err.print("Not a Number: " + e);
+                                        }
                                         light.setText(value);
+                                        tempInt = (capLight - tempInt);
+                                        pLight.setProgress(calculatePercentageInt(tempInt, capLight));
                                         break;
 
                                     case "Soil":
                                         i++;
                                         value = tokens[i];
+                                        try{
+                                            tempInt = Integer.parseInt(value);
+                                        }catch (NumberFormatException e){
+                                            tempInt = 0;
+                                            System.err.print("Not a Number: " + e);
+                                        }
                                         moisture.setText(value + "%");
+                                        pMoist.setProgress(calculatePercentageInt(tempInt, capMoisture));
                                         break;
 
                                     default:
@@ -156,6 +200,26 @@ public class GreenhouseFragment extends Fragment {
 
         // Button to ON/OFF LED on Arduino Board
         return root;
+    }
+
+    private int calculatePercentageInt(int givenValue, int capValue){
+        if(givenValue >= capValue)
+            return 100;
+        else if(givenValue < 0)
+            return 0;
+        else{
+            return ((givenValue * 100)/capValue);
+        }
+    }
+
+    private int calculatePercentageDouble(double givenValue, double capValue){
+        if(givenValue >= capValue)
+            return 100;
+        else if(givenValue < 0)
+            return 0;
+        else{
+            return (int) ((givenValue/capValue) * 100);
+        }
     }
 
     @Override

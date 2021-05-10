@@ -35,13 +35,13 @@
     <TableLayout
         android:id="@+id/tableLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_bias="0.588">
 
         <TableRow
@@ -59,7 +59,8 @@
                 android:gravity="bottom|center_horizontal"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="Temperature" />
+                android:text="Temperature"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/humidityLabel"
@@ -69,7 +70,8 @@
                 android:gravity="bottom|center_horizontal"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="Humidity" />
+                android:text="---Humidity---"
+                android:textSize="14sp" />
         </TableRow>
 
         <TableRow
@@ -79,27 +81,75 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
 
-            <TextView
-                android:id="@+id/temperatureValueTextView"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="10"
-                android:gravity="center_horizontal"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="NaN"
-                android:textSize="36sp" />
+                android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/humidityValueTextView"
+                <TextView
+                    android:id="@+id/temperatureValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="NaN"
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/progress_bar_temperature"
+                    app:layout_constraintEnd_toEndOf="@+id/progress_bar_temperature"
+                    app:layout_constraintStart_toStartOf="@+id/progress_bar_temperature"
+                    app:layout_constraintTop_toTopOf="@+id/progress_bar_temperature" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar_temperature"
+                    style="@style/CircularDeterminateProgressBarHeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:progress="60" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="10"
-                android:gravity="center_horizontal"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="NaN"
-                android:textSize="36sp" />
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/humidityValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="NaN"
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/progress_bar_humidity"
+                    app:layout_constraintEnd_toEndOf="@+id/progress_bar_humidity"
+                    app:layout_constraintStart_toStartOf="@+id/progress_bar_humidity"
+                    app:layout_constraintTop_toTopOf="@+id/progress_bar_humidity" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar_humidity"
+                    style="@style/CircularDeterminateProgressBarWater"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:progress="60" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </TableRow>
 
         <TableRow
@@ -117,7 +167,8 @@
                 android:gravity="bottom|center_horizontal"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="Soil Moisture" />
+                android:text="Soil Moisture"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/lightLevelLabel"
@@ -127,7 +178,8 @@
                 android:gravity="bottom|center_horizontal"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="Light Level" />
+                android:text="Light Level"
+                android:textSize="14sp" />
         </TableRow>
 
         <TableRow
@@ -137,27 +189,75 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
 
-            <TextView
-                android:id="@+id/soilMoistureValueTextView"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="NaN"
-                android:textSize="36sp" />
+                android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/lightLevelValueTextView"
+                <TextView
+                    android:id="@+id/soilMoistureValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="NaN"
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/progress_bar_moisture"
+                    app:layout_constraintEnd_toEndOf="@+id/progress_bar_moisture"
+                    app:layout_constraintStart_toStartOf="@+id/progress_bar_moisture"
+                    app:layout_constraintTop_toTopOf="@+id/progress_bar_moisture" />/>
+
+                <ProgressBar
+                    android:id="@+id/progress_bar_moisture"
+                    style="@style/CircularDeterminateProgressBarWater"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:progress="60" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="NaN"
-                android:textSize="36sp" />
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/lightLevelValueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="NaN"
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/progress_bar_light"
+                    app:layout_constraintEnd_toEndOf="@+id/progress_bar_light"
+                    app:layout_constraintStart_toStartOf="@+id/progress_bar_light"
+                    app:layout_constraintTop_toTopOf="@+id/progress_bar_light" />/>
+
+                <ProgressBar
+                    android:id="@+id/progress_bar_light"
+                    style="@style/CircularDeterminateProgressBarLight"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:progress="60" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </TableRow>
     </TableLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

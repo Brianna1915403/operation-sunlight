@@ -8,4 +8,19 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="CircularDeterminateProgressBarWater">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/circle_water</item>
+    </style>
+
+    <style name="CircularDeterminateProgressBarHeat">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/circle_heat</item>
+    </style>
+
+    <style name="CircularDeterminateProgressBarLight">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/circle_light</item>
+    </style>
+
 </resources>

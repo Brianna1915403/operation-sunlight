@@ -15,5 +15,16 @@
     <color name="colorOff">#FFFFFF</color>
     <color name="colorOn">#E040FB</color>
     <color name="main_accent_color">#8CCE29</color>
+
+    <color name="colorWaterStart">#cae6f5</color>
+    <color name="colorWaterMiddle">#90d0f3</color>
+    <color name="colorWaterEnd">#32adf0</color>
+    <color name="colorHeatStart">#6eeaee</color>
+    <color name="colorHeatMiddle">#e9ac28</color>
+    <color name="colorHeatEnd">#e95428</color>
+    <color name="colorLightStart">#545451</color>
+    <color name="colorLightMiddle">#eded86</color>
+    <color name="colorLightEnd">#f7f7ef</color>
+
     
 </resources>
