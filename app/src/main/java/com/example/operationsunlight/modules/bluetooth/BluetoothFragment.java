@@ -45,7 +45,6 @@ public class BluetoothFragment extends Fragment {
 
     private Button buttonConnect, buttonToggle;
     private Toolbar toolbar;
-    private TextView textViewInfo;
     private ImageView imageView;
 
 
@@ -54,7 +53,6 @@ public class BluetoothFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_bluetooth, container, false);
         buttonConnect = root.findViewById(R.id.buttonConnect);
         toolbar = root.findViewById(R.id.toolbar);
-        textViewInfo = root.findViewById(R.id.textViewInfo);
         buttonToggle = root.findViewById(R.id.lightsButtonToggle);
         buttonToggle.setEnabled(false);
         imageView = root.findViewById(R.id.imageView);
@@ -98,15 +96,12 @@ public class BluetoothFragment extends Fragment {
 
                     case MESSAGE_READ:
                         String arduinoMsg = msg.obj.toString(); // Read message from Arduino
-                        textViewInfo.setText("Arduino Message: " + arduinoMsg);
                         switch (arduinoMsg.toLowerCase()){
                             case "led is turned on":
                                 imageView.setBackgroundColor(getResources().getColor(R.color.colorOn));
-                                textViewInfo.setText("Arduino Message : " + arduinoMsg);
                                 break;
                             case "led is turned off":
                                 imageView.setBackgroundColor(getResources().getColor(R.color.colorOff));
-                                textViewInfo.setText("Arduino Message : " + arduinoMsg);
                                 break;
                         }
                         break;

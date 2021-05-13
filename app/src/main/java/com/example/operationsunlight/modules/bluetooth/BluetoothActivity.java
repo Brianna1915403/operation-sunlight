@@ -46,7 +46,6 @@ public class BluetoothActivity extends AppCompatActivity {
         final Toolbar toolbar = findViewById(R.id.toolbar);
         final ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
-        final TextView textViewInfo = findViewById(R.id.textViewInfo);
         final Button buttonToggle = findViewById(R.id.lightsButtonToggle);
         buttonToggle.setEnabled(false);
         final ImageView imageView = findViewById(R.id.imageView);
@@ -100,11 +99,9 @@ public class BluetoothActivity extends AppCompatActivity {
                         switch (arduinoMsg.toLowerCase()){
                             case "led is turned on":
                                 imageView.setBackgroundColor(getResources().getColor(R.color.colorOn));
-                                textViewInfo.setText("Arduino Message : " + arduinoMsg);
                                 break;
                             case "led is turned off":
                                 imageView.setBackgroundColor(getResources().getColor(R.color.colorOff));
-                                textViewInfo.setText("Arduino Message : " + arduinoMsg);
                                 break;
                         }
                         break;

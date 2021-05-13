@@ -193,65 +193,64 @@ public class WeatherFragment extends Fragment {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        LocationServices.getFusedLocationProviderClient(root.getContext())
-                .requestLocationUpdates(locationRequest, new LocationCallback() {
-                    @Override
-                    public void onLocationResult(@NonNull LocationResult locationResult) {
-                        super.onLocationResult(locationResult);
-                        LocationServices.getFusedLocationProviderClient(root.getContext())
-                                .removeLocationUpdates(this);
-                        if(locationResult != null && locationResult.getLocations().size() > 0){
-                            int latestLocationIndex = locationResult.getLocations().size() - 1;
-                            double latitude =
-                                    locationResult.getLocations().get(latestLocationIndex).getLatitude();
-                            double longitude =
-                                    locationResult.getLocations().get(latestLocationIndex).getLongitude();
+        if (preferences.getString("USERNAME", null) != null) {
+            LocationServices.getFusedLocationProviderClient(root.getContext())
+                    .requestLocationUpdates(locationRequest, new LocationCallback() {
+                        @Override
+                        public void onLocationResult(@NonNull LocationResult locationResult) {
+                            super.onLocationResult(locationResult);
+                    LocationServices.getFusedLocationProviderClient(root.getContext())
+                            .removeLocationUpdates(this);
+                    if (locationResult != null && locationResult.getLocations().size() > 0) {
+                        int latestLocationIndex = locationResult.getLocations().size() - 1;
+                        double latitude =
+                                locationResult.getLocations().get(latestLocationIndex).getLatitude();
+                        double longitude =
+                                locationResult.getLocations().get(latestLocationIndex).getLongitude();
 
-                            lat = "&lat=" + latitude;
-                            lon = "&lon=" + longitude;
-                            System.out.println("Current lat/lon: " + lat + " " + lon);
+                        lat = "&lat=" + latitude;
+                        lon = "&lon=" + longitude;
+                        System.out.println("Current lat/lon: " + lat + " " + lon);
 
-                            final_request = url + apiKey + lat + lon;
-                            System.out.println(final_request);
-                            try {
-                                new GetWeather().execute().get();
-                            } catch (ExecutionException e) {
-                                e.printStackTrace();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-
-                            SimpleDateFormat currentDateFormat = new SimpleDateFormat("E MMM d HH:mm a");
-                            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-
-                            Glide.with(root.getContext())
-                                    .asBitmap()
-                                    .load(WeatherIcon.getWeatherIcon(currentWeather.getIcon()))
-                                    .placeholder(R.drawable.loading_icon)
-                                    .error(R.drawable.error_file)
-                                    .into(image);
-
-                            dateTime.setText("" + currentDateFormat.format(new Date((long) currentWeather.getDatetime() * 1000)));
-                            temperature.setText((int) Math.round(currentWeather.getTemp()) + "\u2103");
-                            feels.setText("Feels Like: " + (int) Math.round(currentWeather.getFeels()) + "\u2103");
-                            main.setText(currentWeather.getMain());
-                            description.setText("Specification: " + currentWeather.getDesc());
-                            humidity.setText("Humidity: " + currentWeather.getHumidity() + "%");
-                            uvi.setText("uvIndex: " + currentWeather.getUvi());
-                            clouds.setText("Clouds: " + currentWeather.getClouds() + "%");
-                            sunrise.setText("Sunrise: " + timeFormat.format(new Date((long) currentWeather.getSunrise() * 1000)));
-                            sunset.setText("Sunset: " + timeFormat.format(new Date((long) currentWeather.getSunset() * 1000)));
-                            windSpeed.setText("Wind Speed: " + currentWeather.getWind_speed() + "m/s");
-                            windDegree.setText("Wind Degree: " + currentWeather.getWind_deg() + "\u00B0");
-                            rain.setText("Rain (Past Hour): " + currentWeather.getRain() + "mm");
+                        final_request = url + apiKey + lat + lon;
+                        System.out.println(final_request);
+                        try {
+                            new GetWeather().execute().get();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
+
+                        SimpleDateFormat currentDateFormat = new SimpleDateFormat("E MMM d HH:mm a");
+                        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+
+                        Glide.with(root.getContext())
+                                .asBitmap()
+                                .load(WeatherIcon.getWeatherIcon(currentWeather.getIcon()))
+                                .placeholder(R.drawable.loading_icon)
+                                .error(R.drawable.error_file)
+                                .into(image);
+
+                        dateTime.setText("" + currentDateFormat.format(new Date((long) currentWeather.getDatetime() * 1000)));
+                        temperature.setText((int) Math.round(currentWeather.getTemp()) + "\u2103");
+                        feels.setText("Feels Like: " + (int) Math.round(currentWeather.getFeels()) + "\u2103");
+                        main.setText(currentWeather.getMain());
+                        description.setText("Specification: " + currentWeather.getDesc());
+                        humidity.setText("Humidity: " + currentWeather.getHumidity() + "%");
+                        uvi.setText("uvIndex: " + currentWeather.getUvi());
+                        clouds.setText("Clouds: " + currentWeather.getClouds() + "%");
+                        sunrise.setText("Sunrise: " + timeFormat.format(new Date((long) currentWeather.getSunrise() * 1000)));
+                        sunset.setText("Sunset: " + timeFormat.format(new Date((long) currentWeather.getSunset() * 1000)));
+                        windSpeed.setText("Wind Speed: " + currentWeather.getWind_speed() + "m/s");
+                        windDegree.setText("Wind Degree: " + currentWeather.getWind_deg() + "\u00B0");
+                        rain.setText("Rain (Past Hour): " + currentWeather.getRain() + "mm");
                     }
-                }, Looper.getMainLooper());
-
-
-
-
+                }
+            }, Looper.getMainLooper());
         }
+
+    }
 
     private void askLocationPermission(){
         if(ContextCompat.checkSelfPermission(root.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){

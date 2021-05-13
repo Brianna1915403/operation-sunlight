@@ -46,7 +46,6 @@ public class GreenhouseFragment extends Fragment {
 
     private Button buttonConnect;
     private Toolbar toolbar;
-    private TextView textViewInfo;
     private ProgressBar pTemp, pHum, pMoist, pLight;
 
     private double capTemperature = 50.00;
@@ -71,7 +70,6 @@ public class GreenhouseFragment extends Fragment {
         light = root.findViewById(R.id.lightLevelValueTextView);
         buttonConnect = root.findViewById(R.id.buttonConnect);
         toolbar = root.findViewById(R.id.toolbar);
-        textViewInfo = root.findViewById(R.id.textViewInfo);
         pTemp = root.findViewById(R.id.progress_bar_temperature);
         pHum = root.findViewById(R.id.progress_bar_humidity);
         pMoist = root.findViewById(R.id.progress_bar_moisture);
