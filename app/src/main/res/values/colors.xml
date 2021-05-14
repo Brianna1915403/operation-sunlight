@@ -16,6 +16,18 @@
     <color name="colorOn">#E040FB</color>
     <color name="main_accent_color">#8CCE29</color>
 
+    <!-- GREEN THEME COLOURS -->
+    <color name="colour_main_green">#8CCE29</color>
+    <color name="colour_accent_green">#5F9809</color>
+
+    <!-- BLUE THEME COLOURS -->
+    <color name="colour_main_blue">#0FBED5</color>
+    <color name="colour_accent_blue">#0D8998</color>
+
+    <!-- RED THEME COLOURS -->
+    <color name="colour_main_red">#EC5528</color>
+    <color name="colour_accent_red">#CC3F16</color>
+
     <color name="colorWaterStart">#cae6f5</color>
     <color name="colorWaterMiddle">#90d0f3</color>
     <color name="colorWaterEnd">#32adf0</color>
@@ -25,6 +37,4 @@
     <color name="colorLightStart">#545451</color>
     <color name="colorLightMiddle">#eded86</color>
     <color name="colorLightEnd">#f7f7ef</color>
-
-    
 </resources>

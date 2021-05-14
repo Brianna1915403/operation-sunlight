@@ -1,9 +1,15 @@
 package com.example.operationsunlight;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,20 +32,24 @@ import android.widget.ToggleButton;
 
 import com.example.operationsunlight.modules.login.LoginActivity;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements TimePickerDialog.OnTimeSetListener {
     SharedPreferences sharedPreferences;
     int theme_id;
     boolean isDarkMode;
     View root;
 
-    ToggleButton dark_mode;
+    TimePickerDialog.OnTimeSetListener onTimeSetListener = this::onTimeSet;
+
+    Button set_time;
+    ToggleButton dark_mode, notifications;
     Spinner theme;
-    Button logout_button;
 
     ArrayAdapter<CharSequence> adapter;
 
@@ -86,6 +96,34 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+
+        // NOTIFICATIONS
+        notifications = root.findViewById(R.id.notification_togglebtn);
+        notifications.setChecked(sharedPreferences.getBoolean("HAS_NOTIFICATIONS", false));
+        set_time = root.findViewById(R.id.set_time_button);
+        set_time.setEnabled(notifications.isChecked());
+        notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("HAS_NOTIFICATIONS", isChecked);
+                editor.apply();
+                set_time.setEnabled(isChecked);
+            }
+        });
+        set_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    NotificationChannel channel = new NotificationChannel("Plant Care", "Plant Care",
+                            NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager manager = getActivity().getSystemService(NotificationManager.class);
+                    manager.createNotificationChannel(channel);
+                }
+                TimePicker timePicker = new TimePicker(onTimeSetListener);
+                timePicker.show(getActivity().getSupportFragmentManager(), "Time Picker");
+            }
+        });
         return root;
     }
 
@@ -93,6 +131,7 @@ public class SettingsFragment extends Fragment {
         switch (theme.toUpperCase()) {
             case "GREEN": return R.style.Theme_OperationSunlight_NoActionBar;
             case "BLUE": return R.style.Theme_OperationSunlight_Blue_NoActionBar;
+            case "RED": return R.style.Theme_OperationSunlight_Red_NoActionBar;
             default: return -1;
         }
     }
@@ -101,7 +140,21 @@ public class SettingsFragment extends Fragment {
         switch (id) {
             case R.style.Theme_OperationSunlight_NoActionBar: return 0;
             case R.style.Theme_OperationSunlight_Blue_NoActionBar: return 1;
+            case R.style.Theme_OperationSunlight_Red_NoActionBar: return 2;
             default: return -1;
         }
+    }
+
+    @Override
+    public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
+        Toast.makeText(view.getContext(), "Time Set!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getContext(), NotificationService.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 }

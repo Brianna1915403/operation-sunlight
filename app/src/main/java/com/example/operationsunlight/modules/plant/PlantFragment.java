@@ -54,7 +54,7 @@ public class PlantFragment extends Fragment implements OnPlantListener {
     private TextView pageNum;
     private ProgressDialog progressDialog;
 
-//    TREFLE HAS BEEN DISCONTINUED HENCE THE CODE I DEPRECATED
+//    TREFLE HAS BEEN DISCONTINUED HENCE THE CODE IS DEPRECATED
 //    private static String url = "https://trefle.io/api/v1/plants";
 //    private final static String token = "?token=dZWkjKZTg7acXlHla7dapXq4-cAgxA4nU1eqHCA763M";
 //    private static String search = "/search" + token + "&q=";

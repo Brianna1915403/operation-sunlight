@@ -75,7 +75,6 @@ public class NoteFragment extends Fragment implements View.OnClickListener, OnNo
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         noteRef = FirebaseDatabase.getInstance().getReference().child("NOTE");
         userRef = FirebaseDatabase.getInstance().getReference().child("USER").child(preferences.getString("USERNAME", null));
-        getNotes();
         note_edittext = root.findViewById(R.id.note_edittext);
         add_note_button = root.findViewById(R.id.add_note_button);
         add_note_button.setVisibility(View.VISIBLE);
@@ -83,6 +82,7 @@ public class NoteFragment extends Fragment implements View.OnClickListener, OnNo
         update_note_button = root.findViewById(R.id.update_note_button);
         update_note_button.setVisibility(View.GONE);
         update_note_button.setOnClickListener(this::onClick);
+        getNotes();
         return root;
     }
 

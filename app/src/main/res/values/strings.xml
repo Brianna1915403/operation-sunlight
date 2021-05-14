@@ -46,6 +46,7 @@
     <string-array name="themes">
         <item>Green</item>
         <item>Blue</item>
+        <item>Red</item>
     </string-array>
 
 </resources>
