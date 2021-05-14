@@ -49,11 +49,6 @@ public class PlantBioFragment extends Fragment implements View.OnClickListener {
     Plant plant;
     PlantBio plantBio;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

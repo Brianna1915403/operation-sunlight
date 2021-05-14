@@ -109,6 +109,13 @@ public class SettingsFragment extends Fragment implements TimePickerDialog.OnTim
                 editor.putBoolean("HAS_NOTIFICATIONS", isChecked);
                 editor.apply();
                 set_time.setEnabled(isChecked);
+                if(!isChecked) {
+                    Toast.makeText(getContext(), "Notification have been turned off!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getContext(), NotificationService.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
+                    AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                    alarmManager.cancel(pendingIntent);
+                }
             }
         });
         set_time.setOnClickListener(new View.OnClickListener() {

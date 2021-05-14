@@ -1,6 +1,8 @@
 package com.example.operationsunlight.modules.plant;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -46,6 +48,7 @@ public class PlantFragment extends Fragment implements OnPlantListener {
     private PlantRecyclerAdapter adapter;
     private ArrayList<Plant> plant_list = new ArrayList<>();
     DatabaseReference reference;
+    SharedPreferences preferences;
     long ID = 0;
     private OnPlantListener onPlantListener = this::onPlantClick;
 
@@ -70,10 +73,11 @@ public class PlantFragment extends Fragment implements OnPlantListener {
 //    private static String final_request = "";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_no_connection, container, false);
-        if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()))
+        root = inflater.inflate(R.layout.fragment_need_sign_in, container, false);
+        preferences = getActivity().getSharedPreferences("ACCOUNT", Context.MODE_PRIVATE);
+        if (preferences.getString("USERNAME", null) == null) {
             return root;
-        else
+        } else
             root = inflater.inflate(R.layout.fragment_plant, container, false);
         reference = FirebaseDatabase.getInstance().getReference().child("PLANT");
         reference.addValueEventListener(new ValueEventListener() {
@@ -193,14 +197,13 @@ public class PlantFragment extends Fragment implements OnPlantListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()))
+        if (!HTTPHandler.hasInternetConnection(getActivity(), root.getContext()) || preferences.getString("USERNAME", null) == null)
             return;
         updateRecycler();
     }
 
     @Override
     public void onPlantClick(long plant_id) {
-        Log.d("PLANT_FRAG::PLANT_CLICK", String.valueOf(plant_id));
         NavController navController = NavHostFragment.findNavController(this);
         Bundle bundle = new Bundle();
         bundle.putLong("plant_id", plant_id);
