@@ -43,7 +43,7 @@ public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdap
                 .error(R.drawable.error_file)
                 .into(holder.image);
         
-        holder.plant_id = plant .plant_id;
+        holder.plant_id = position;
         holder.common_name.setText(plant.common_name);
         holder.scientific_name.setText(plant.scientific_name);
         holder.family_common_name.setText(plant.family_common_name);
