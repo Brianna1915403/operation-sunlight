@@ -3,6 +3,7 @@ package com.example.operationsunlight.modules.plant;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.operationsunlight.R;
+import com.example.operationsunlight.modules.garden.Garden;
+import com.example.operationsunlight.modules.login.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,20 +28,24 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 
-public class PlantBioFragment extends Fragment {
+public class PlantBioFragment extends Fragment implements View.OnClickListener {
     View root;
     SharedPreferences preferences;
-    DatabaseReference plantRef;
+    DatabaseReference plantRef, gardenRef, userRef;
 
     private ImageView plantImage;
     private TextView commonName, scientificName, familyCommonName,
             isVegetable, daysToHarvest, rowSpacing, spread,
             ph_min_max, light, precipitation_min_max, min_root_depth,
-            temperature_min_max, plant_fab_label, note_fab_label;
-    private FloatingActionButton menu_fab, plant_fab, note_fab;
+            temperature_min_max, plant_fab_label, remove_fab_label;
+    private FloatingActionButton menu_fab, plant_fab, remove_fab;
     private boolean isFabVisible = false;
     private long plant_id;
+    List<Plant> plantList = new ArrayList<>();
     Plant plant;
     PlantBio plantBio;
 
@@ -52,9 +59,14 @@ public class PlantBioFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_plant_bio, container, false);
         preferences = getActivity().getSharedPreferences("ACCOUNT", Context.MODE_PRIVATE);
-
         Bundle bundle = getArguments();
         plant_id = bundle.getLong("plant_id");
+        gardenRef = FirebaseDatabase.getInstance().getReference().child("GARDEN");
+        plantRef = FirebaseDatabase.getInstance().getReference().child("PLANT").child(String.valueOf(plant_id));
+        userRef = FirebaseDatabase.getInstance().getReference().child("USER").child(preferences.getString("USERNAME", null));
+        getGarden();
+        getPlant();
+
         plantImage = root.findViewById(R.id.plantImage);
         commonName = root.findViewById(R.id.commonNameTextView);
         scientificName = root.findViewById(R.id.scientificNameTextView);
@@ -67,44 +79,133 @@ public class PlantBioFragment extends Fragment {
         precipitation_min_max = root.findViewById(R.id.precipitation_min_maxTextView);
         min_root_depth = root.findViewById(R.id.min_root_depthTextView);
         temperature_min_max = root.findViewById(R.id.temperature_min_max_TextView);
-        note_fab_label = root.findViewById(R.id.plant_note_fab_label);
-        note_fab = root.findViewById(R.id.plant_note_fab);
-        note_fab.setVisibility(View.GONE);
-        note_fab_label.setVisibility(View.GONE);
-        note_fab_label = root.findViewById(R.id.plant_note_fab_label);
-        note_fab = root.findViewById(R.id.plant_note_fab);
-        note_fab.setVisibility(View.GONE);
-        note_fab_label.setVisibility(View.GONE);
-        note_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: Check if the user has this plant in their garden if not disable the button.
-                Toast.makeText(root.getContext(), "Notes to be Implemented!", Toast.LENGTH_LONG).show();
-            }
-        });
+
+        remove_fab_label = root.findViewById(R.id.plant_remove_fab_label);
+        remove_fab = root.findViewById(R.id.plant_remove_fab);
+        remove_fab.setVisibility(View.GONE);
+        remove_fab_label.setVisibility(View.GONE);
+        remove_fab.setOnClickListener(this::onClick);
+
         plant_fab_label = root.findViewById(R.id.plant_plant_fab_label);
         plant_fab = root.findViewById(R.id.plant_plant_fab);
         plant_fab.setVisibility(View.GONE);
         plant_fab_label.setVisibility(View.GONE);
-        plant_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(root.getContext(), plant + " Planted!", Toast.LENGTH_LONG).show();
-            }
-        });
+        plant_fab.setOnClickListener(this::onClick);
+
         menu_fab = root.findViewById(R.id.plant_menu_fab);
-        menu_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        menu_fab.setOnClickListener(this::onClick);
+        return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.plant_menu_fab:
                 isFabVisible = !isFabVisible;
-                note_fab.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
-                note_fab_label.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
                 plant_fab.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
                 plant_fab_label.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
-            }
-        });
-        plantRef = FirebaseDatabase.getInstance().getReference().child("PLANT").child(plant_id + "");
+                remove_fab.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
+                remove_fab_label.setVisibility(isFabVisible? View.VISIBLE : View.GONE);
+                remove_fab.setEnabled(plantList.contains(plant));
+                plant_fab.setEnabled(!plantList.contains(plant));
+                break;
+            case R.id.plant_plant_fab:
+                remove_fab.setEnabled(true);
+                plant_fab.setEnabled(false);
+                addPlantToGarden();
+                Toast.makeText(root.getContext(), plant.common_name + " has been planted!", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.plant_remove_fab:
+                plant_fab.setEnabled(true);
+                remove_fab.setEnabled(false);
+                removePlantFromGarden();
+                Toast.makeText(root.getContext(), plant.common_name + " has been removed.", Toast.LENGTH_SHORT).show();
+                break;
+        }
 
+    }
+
+    public void getGarden() {
+        plantList.clear();
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                String gardenRef_str = user.getGardenRef();
+                if (gardenRef_str == null) {
+                    gardenRef_str = gardenRef.push().getKey();
+                    user.setGardenRef(gardenRef_str);
+                    userRef.setValue(user);
+                }
+                gardenRef.child(gardenRef_str).get().addOnSuccessListener(dataSnapshot -> {
+                    if (dataSnapshot.getValue() == null)
+                        return;
+                    Log.d("PLANT_BIO::GET_GARDEN", dataSnapshot.getValue().toString());
+                    for (Object obj : (List) dataSnapshot.getValue()) {
+                        HashMap map = (HashMap) obj;
+                        Plant plant = new Plant(Long.parseLong(map.get("plant_id").toString()),
+                                map.get("common_name").toString(), map.get("scientific_name").toString(),
+                                map.get("family_common_name").toString(), map.get("image_url").toString());
+                        Log.d("GARDEN::GET_GARDEN", plant.toString());
+                        plantList.add(plant);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
+    public void addPlantToGarden() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                String gardenRef_str = user.getGardenRef();
+                if (gardenRef_str == null) {
+                    gardenRef_str = gardenRef.push().getKey();
+                    user.setGardenRef(gardenRef_str);
+                    userRef.setValue(user);
+                    return;
+                }
+                plantList.add(plant);
+                gardenRef.child(gardenRef_str).setValue(plantList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
+    public void removePlantFromGarden() {
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                String gardenRef_str = user.getGardenRef();
+                if (gardenRef_str == null) {
+                    gardenRef_str = gardenRef.push().getKey();
+                    user.setGardenRef(gardenRef_str);
+                    userRef.setValue(user);
+                    return;
+                }
+                plantList.remove(plant);
+                gardenRef.child(gardenRef_str).setValue(plantList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
+    public void getPlant() {
         plantRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -154,7 +255,5 @@ public class PlantBioFragment extends Fragment {
 
             }
         });
-
-        return root;
     }
 }

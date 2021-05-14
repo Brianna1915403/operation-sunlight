@@ -6,31 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".modules.plant.PlantBioFragment">
 
-<!--    <TextView-->
-<!--        android:id="@+id/plant_bio_trefle_disclaimer"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginBottom="5dp"-->
-<!--        android:text="@string/trefle_disclaimer"-->
-<!--        android:textColorLink="?attr/colorAccent"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
+    <!--    <TextView-->
+    <!--        android:id="@+id/plant_bio_trefle_disclaimer"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginBottom="5dp"-->
+    <!--        android:text="@string/trefle_disclaimer"-->
+    <!--        android:textColorLink="?attr/colorAccent"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent" />-->
+
+    <TextView
+        android:id="@+id/plant_remove_fab_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="Remove"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/plant_remove_fab"
+        app:layout_constraintEnd_toStartOf="@+id/plant_remove_fab"
+        app:layout_constraintTop_toTopOf="@+id/plant_remove_fab"
+        app:layout_constraintVertical_bias="0.54" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/plant_remove_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="20dp"
+        android:clickable="true"
+        android:src="@drawable/ic_fab_menu_trowel"
+        android:tooltipText="Remove from Garden"
+        app:backgroundTint="?attr/colorPrimary"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toTopOf="@id/plant_plant_fab"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/plant_menu_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="24dp"
         android:clickable="true"
         android:src="@drawable/ic_fab_menu_menu"
         android:tooltipText="Plant Menu"
         app:backgroundTint="?attr/colorPrimary"
         app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout3" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/plant_plant_fab_label"
@@ -38,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:text="Add to Garden"
+        android:text="Plant"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/plant_plant_fab"
         app:layout_constraintEnd_toStartOf="@+id/plant_plant_fab"
@@ -49,43 +77,15 @@
         android:id="@+id/plant_plant_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
         android:layout_marginBottom="20dp"
         android:clickable="true"
-        android:src="@drawable/ic_fab_menu_trowel"
+        android:src="@drawable/ic_fab_menu_plant"
         android:tooltipText="Add to Garden"
         app:backgroundTint="?attr/colorPrimary"
         app:fabSize="auto"
         app:layout_constraintBottom_toTopOf="@id/plant_menu_fab"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/plant_note_fab_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="Add a Note"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/plant_note_fab"
-        app:layout_constraintEnd_toStartOf="@+id/plant_note_fab"
-        app:layout_constraintTop_toTopOf="@+id/plant_note_fab"
-        app:layout_constraintVertical_bias="0.54" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/plant_note_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:clickable="true"
-        android:src="@drawable/ic_fab_menu_note"
-        android:tooltipText="Add a Note"
-        app:backgroundTint="?attr/colorPrimary"
-        app:fabSize="auto"
-        app:layout_constraintBottom_toTopOf="@id/plant_plant_fab"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TableLayout
@@ -98,6 +98,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="64dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

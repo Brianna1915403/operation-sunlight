@@ -1,5 +1,7 @@
 package com.example.operationsunlight.modules.plant;
 
+import java.util.Objects;
+
 public class Plant {
 //    int plant_id;
     long plant_id;
@@ -26,6 +28,10 @@ public class Plant {
         this.image_url = other.image_url;
     }
 
+    public long getPlant_id() { return plant_id; }
+
+    public void setPlant_id(long plant_id) { this.plant_id = plant_id; }
+
     public String getCommon_name() {
         return common_name;
     }
@@ -49,5 +55,17 @@ public class Plant {
                 ", family_common_name='" + family_common_name + '\'' +
                 ", image_url='" + image_url + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Plant plant = (Plant) o;
+        return plant_id == plant.plant_id &&
+                common_name.equals(plant.common_name) &&
+                scientific_name.equals(plant.scientific_name) &&
+                family_common_name.equals(plant.family_common_name) &&
+                image_url.equals(plant.image_url);
     }
 }

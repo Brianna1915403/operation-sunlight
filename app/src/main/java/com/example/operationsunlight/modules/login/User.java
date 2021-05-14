@@ -7,7 +7,7 @@ public class User {
     private String password;
     private String email;
     private List<String> noteRefs;
-    private String garden;
+    private String gardenRef;
 
     public User() {    }
 
@@ -22,12 +22,12 @@ public class User {
         this.email = email;
     }
 
-    public User(String username, String password, String email, List<String> noteRefs, String garden) {
+    public User(String username, String password, String email, List<String> noteRefs, String gardenRef) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.noteRefs = noteRefs;
-        this.garden = garden;
+        this.gardenRef = gardenRef;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", noteRefs=" + noteRefs +
-                ", garden='" + garden + '\'' +
+                ", gardenRef='" + gardenRef + '\'' +
                 '}';
     }
 
@@ -82,11 +82,11 @@ public class User {
         this.noteRefs = noteRefs;
     }
 
-    public String getGarden() {
-        return garden;
+    public String getGardenRef() {
+        return gardenRef;
     }
 
-    public void setGarden(String garden) {
-        this.garden = garden;
+    public void setGardenRef(String gardenRef) {
+        this.gardenRef = gardenRef;
     }
 }

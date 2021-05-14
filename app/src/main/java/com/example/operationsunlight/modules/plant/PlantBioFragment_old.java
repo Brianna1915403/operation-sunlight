@@ -66,17 +66,6 @@ public class PlantBioFragment_old extends Fragment {
         precipitation_min_max = root.findViewById(R.id.precipitation_min_maxTextView);
         min_root_depth = root.findViewById(R.id.min_root_depthTextView);
         temperature_min_max = root.findViewById(R.id.temperature_min_max_TextView);
-        note_fab_label = root.findViewById(R.id.plant_note_fab_label);
-        note_fab = root.findViewById(R.id.plant_note_fab);
-        note_fab.setVisibility(View.GONE);
-        note_fab_label.setVisibility(View.GONE);
-        note_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: Check if the user has this plant in their garden if not disable the button.
-                Toast.makeText(root.getContext(), "Notes to be Implemented!", Toast.LENGTH_LONG).show();
-            }
-        });
         plant_fab_label = root.findViewById(R.id.plant_plant_fab_label);
         plant_fab = root.findViewById(R.id.plant_plant_fab);
         plant_fab.setVisibility(View.GONE);

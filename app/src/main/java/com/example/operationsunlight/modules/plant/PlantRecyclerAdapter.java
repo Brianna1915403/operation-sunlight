@@ -18,7 +18,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdapter.ViewHolder>{
     private OnPlantListener onPlantListener;
-    ArrayList<Plant> plant_list = new ArrayList<>();
+    ArrayList<Plant> plant_list;
     Context mContext;
 
     public PlantRecyclerAdapter(ArrayList<Plant> plants, Context mContext, OnPlantListener onPlantListener) {
@@ -42,8 +42,7 @@ public class PlantRecyclerAdapter extends RecyclerView.Adapter<PlantRecyclerAdap
                 .placeholder(R.drawable.error_file)
                 .error(R.drawable.error_file)
                 .into(holder.image);
-        
-        holder.plant_id = position;
+        holder.plant_id = plant.plant_id;
         holder.common_name.setText(plant.common_name);
         holder.scientific_name.setText(plant.scientific_name);
         holder.family_common_name.setText(plant.family_common_name);

@@ -28,6 +28,10 @@
     <color name="colour_main_red">#EC5528</color>
     <color name="colour_accent_red">#CC3F16</color>
 
+    <!-- PINK THEME COLOURS  -->
+    <color name="colour_main_pink">#fdd6fc</color>
+    <color name="colour_accent_pink">#dc88da</color>
+
     <color name="colorWaterStart">#cae6f5</color>
     <color name="colorWaterMiddle">#90d0f3</color>
     <color name="colorWaterEnd">#32adf0</color>

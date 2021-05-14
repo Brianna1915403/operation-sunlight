@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -199,6 +200,7 @@ public class PlantFragment extends Fragment implements OnPlantListener {
 
     @Override
     public void onPlantClick(long plant_id) {
+        Log.d("PLANT_FRAG::PLANT_CLICK", String.valueOf(plant_id));
         NavController navController = NavHostFragment.findNavController(this);
         Bundle bundle = new Bundle();
         bundle.putLong("plant_id", plant_id);

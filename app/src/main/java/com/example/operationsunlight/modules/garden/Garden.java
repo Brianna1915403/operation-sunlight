@@ -13,6 +13,10 @@ public class Garden {
         this.plants = plants;
     }
 
+    public boolean add(Plant plant) { return plants.add(plant); }
+
+    public boolean remove(Plant plant) { return plants.remove(plant); }
+
     @Override
     public String toString() {
         return "Garden{" +

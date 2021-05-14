@@ -132,6 +132,7 @@ public class SettingsFragment extends Fragment implements TimePickerDialog.OnTim
             case "GREEN": return R.style.Theme_OperationSunlight_NoActionBar;
             case "BLUE": return R.style.Theme_OperationSunlight_Blue_NoActionBar;
             case "RED": return R.style.Theme_OperationSunlight_Red_NoActionBar;
+            case "PINK": return R.style.Theme_OperationSunlight_Pink_NoActionBar;
             default: return -1;
         }
     }
@@ -141,6 +142,7 @@ public class SettingsFragment extends Fragment implements TimePickerDialog.OnTim
             case R.style.Theme_OperationSunlight_NoActionBar: return 0;
             case R.style.Theme_OperationSunlight_Blue_NoActionBar: return 1;
             case R.style.Theme_OperationSunlight_Red_NoActionBar: return 2;
+            case R.style.Theme_OperationSunlight_Pink_NoActionBar: return 3;
             default: return -1;
         }
     }
